@@ -23,6 +23,7 @@ public class WallControl : MonoBehaviour
 
     private Vector2? ballInitialVelocity;
     private Dictionary<States, int> counters;
+	private int PAUSED = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -36,6 +37,10 @@ public class WallControl : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
+		if (Time.timeScale == PAUSED) {
+			return;
+		}
+
 	    switch (State)
 	    {
 	        case States.Idle:
