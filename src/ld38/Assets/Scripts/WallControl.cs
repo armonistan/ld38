@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Assets;
 
@@ -24,11 +22,8 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
     public int ChargeFrames = 100;
     public int ReflectFrames = 5;
     public int StrongReflectFrames = 5;
-    public int ShortCooldown = 10;
-    public int LongCooldown = 30;
-
-    private Vector2? ballInitialVelocity;
-	private int PAUSED = 0;
+    public int ShortCooldownFrames = 10;
+    public int LongCooldownFrames = 30;
 
 	// Use this for initialization
 	void Start () {
@@ -37,11 +32,12 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
 	
 	// Update is called once per frame
 	void Update () {
-		if (Time.timeScale == PAUSED) {
-			return;
-		}
+	    if (Time.timeScale == GameControl.Paused)
+	    {
+	        return;
+	    }
 
-	    switch (State)
+        switch (State)
 	    {
 	        case States.Idle:
                 GetComponent<Renderer>().material.color = Color.white;
@@ -79,7 +75,7 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
 	        case States.ShortCooldown:
 	            GetComponent<Renderer>().material.color = Color.cyan;
 
-	            if (StateCounters[State] < ShortCooldown)
+	            if (StateCounters[State] < ShortCooldownFrames)
 	            {
 	                IncrementCounter(State);
 	            }
@@ -92,7 +88,7 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
 	        case States.LongCooldown:
 	            GetComponent<Renderer>().material.color = Color.magenta;
 
-	            if (StateCounters[State] < LongCooldown)
+	            if (StateCounters[State] < LongCooldownFrames)
 	            {
 	                IncrementCounter(State);
 	            }
@@ -114,7 +110,6 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
 	                }
 	                else
 	                {
-	                    
 	                    IncrementCounter(State);
                     }
                 }
@@ -144,6 +139,11 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
 
     void OnCollisionStay2D(Collision2D coll)
     {
+        if (Time.timeScale == GameControl.Paused)
+        {
+            return;
+        }
+
         BallControl ball;
 
         if ((ball = coll.gameObject.GetComponent<BallControl>()) != null)
@@ -151,22 +151,41 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
             switch (State)
             {
                 case States.Idle:
+                case States.Primed:
                     if (ball.State == BallControl.States.Idle)
                     {
                         ball.State = BallControl.States.Pause;
                     }
                     break;
-                case States.Primed:
-                    break;
                 case States.Reflect:
+                    if (ball.State == BallControl.States.Pause)
+                    {
+                        HandleBallBounce(ball);
+                        ResetCounter(State);
+                        State = States.Idle;
+                        ball.State = BallControl.States.Bounce;
+                    }
                     break;
                 case States.ShortCooldown:
+                    ball.State = BallControl.States.GameOver;
                     break;
                 case States.LongCooldown:
+                    ball.State = BallControl.States.GameOver;
                     break;
                 case States.Charging:
+                    if (ball.State == BallControl.States.Idle)
+                    {
+                        ball.State = BallControl.States.Pause;
+                    }
                     break;
                 case States.StrongReflect:
+                    if (ball.State == BallControl.States.Pause)
+                    {
+                        HandleBallBounce(ball);
+                        ResetCounter(State);
+                        State = States.Idle;
+                        ball.State = BallControl.States.Bounce;
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -174,18 +193,23 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
         }
     }
 
-    private void HandleBallBounce(BallControl ball, Vector2 velocity)
+    void OnCollisionExit2D(Collision2D coll)
+    {
+        BallControl ball;
+
+        if ((ball = coll.gameObject.GetComponent<BallControl>()) != null)
+        {
+            ball.State = BallControl.States.Idle;
+        }
+    }
+
+    private void HandleBallBounce(BallControl ball)
     {
         // Source: http://stackoverflow.com/questions/573084/how-to-calculate-bounce-angle
-        var u = (Vector2.Dot(velocity, Normal) / Vector2.Dot(Normal, Normal)) * Normal;
-        var w = velocity - u;
+        var u = (Vector2.Dot(ball.Velocity, Normal) / Vector2.Dot(Normal, Normal)) * Normal;
+        var w = ball.Velocity - u;
 
         //TODO: Add friction?
         ball.Velocity = w - u;
-
-        if (ball.Velocity == Vector2.zero)
-        {
-            Debug.Log("wat");
-        }
     }
 }
