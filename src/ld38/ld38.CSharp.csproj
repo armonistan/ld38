@@ -74,11 +74,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GameControl.cs" />
+    <Compile Include="Assets\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\BallControl.cs" />
+    <Compile Include="Assets\Scripts\GameControl.cs" />
     <Compile Include="Assets\Scripts\PauseControl.cs" />
+    <Compile Include="Assets\Scripts\StatefulMonoBehavior.cs" />
     <Compile Include="Assets\Scripts\WallControl.cs" />
-    <Compile Include="Assets\Scripts\StatefulMonobehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />

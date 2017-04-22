@@ -2,8 +2,9 @@
 using UnityEngine;
 using System.Linq;
 using Assets;
+using Assets.Scripts;
 
-public class WallControl : StatefulMonobehavior<WallControl.States>
+public class WallControl : StatefulMonoBehavior<WallControl.States>
 {
     public enum States
     {
@@ -68,7 +69,7 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
                 }
                 else
                 {
-                    State = States.ShortCooldown;
+                    State = States.LongCooldown;
                 }
                 break;
 	        case States.ShortCooldown:
@@ -153,11 +154,15 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
                     }
                     break;
                 case States.Reflect:
-                    if (ball.State != BallControl.States.Bounce)
+                    if (ball.State == BallControl.States.Pause)
                     {
                         HandleBallBounce(ball);
                         State = States.Idle;
-                        ball.State = BallControl.States.Bounce;
+                    }
+                    else if (ball.State == BallControl.States.Idle)
+                    {
+                        HandleBallBounce(ball);
+                        State = States.ShortCooldown;
                     }
                     break;
                 case States.ShortCooldown:
@@ -172,7 +177,6 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
                     {
                         HandleBallBounce(ball);
                         State = States.Idle;
-                        ball.State = BallControl.States.Bounce;
                     }
                     break;
                 default:
@@ -199,5 +203,7 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
 
         //TODO: Add friction?
         ball.Velocity = w - u;
+
+        ball.State = BallControl.States.Bounce;
     }
 }
