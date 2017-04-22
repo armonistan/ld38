@@ -23,7 +23,7 @@ Library/
 /*.unityproj
 /*.booproj
 /.idea*/
-/*.meta
+/*/**/*.meta
 /*.info
  
 # ============ #
