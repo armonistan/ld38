@@ -28,11 +28,11 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     {
         get
         {
-            return new Vector2(Mathf.Cos(RadAngle), Mathf.Sin(RadAngle)) * Speed * Time.fixedDeltaTime;
+            return new Vector2(Mathf.Cos(RadAngle), Mathf.Sin(RadAngle)) * Speed * Time.deltaTime;
         }
         set
         {
-            Speed = value.magnitude / Time.fixedDeltaTime;
+            Speed = value.magnitude / Time.deltaTime;
             RadAngle = Mathf.Atan2(value.y, value.x);
         }
     }
