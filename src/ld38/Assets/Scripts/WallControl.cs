@@ -68,7 +68,7 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
                 }
                 else
                 {
-                    State = States.ShortCooldown;
+                    State = States.LongCooldown;
                 }
                 break;
 	        case States.ShortCooldown:
@@ -153,10 +153,16 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
                     }
                     break;
                 case States.Reflect:
-                    if (ball.State != BallControl.States.Bounce)
+                    if (ball.State == BallControl.States.Pause)
                     {
                         HandleBallBounce(ball);
                         State = States.Idle;
+                        ball.State = BallControl.States.Bounce;
+                    }
+                    else if (ball.State == BallControl.States.Idle)
+                    {
+                        HandleBallBounce(ball);
+                        State = States.ShortCooldown;
                         ball.State = BallControl.States.Bounce;
                     }
                     break;
