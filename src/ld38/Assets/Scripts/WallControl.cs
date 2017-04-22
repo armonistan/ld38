@@ -62,39 +62,36 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
             case States.Reflect:
                 GetComponent<Renderer>().material.color = Color.blue;
 
-                if (StateCounters[State] < ReflectFrames)
+                if (Counter < ReflectFrames)
                 {
-                    IncrementCounter(State);
+                    IncrementCounter();
                 }
                 else
                 {
-                    ResetCounter(State);
                     State = States.ShortCooldown;
                 }
                 break;
 	        case States.ShortCooldown:
 	            GetComponent<Renderer>().material.color = Color.cyan;
 
-	            if (StateCounters[State] < ShortCooldownFrames)
+	            if (Counter < ShortCooldownFrames)
 	            {
-	                IncrementCounter(State);
+	                IncrementCounter();
 	            }
 	            else
 	            {
-	                ResetCounter(State);
 	                State = States.Idle;
 	            }
                 break;
 	        case States.LongCooldown:
 	            GetComponent<Renderer>().material.color = Color.magenta;
 
-	            if (StateCounters[State] < LongCooldownFrames)
+	            if (Counter < LongCooldownFrames)
 	            {
-	                IncrementCounter(State);
+	                IncrementCounter();
 	            }
 	            else
 	            {
-	                ResetCounter(State);
 	                State = States.Idle;
 	            }
                 break;
@@ -103,32 +100,29 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
 
 	            if (Input.GetKey(EnableKey) && Input.GetKey(KeyCode.Space))
 	            {
-	                if (StateCounters[State] > ChargeFrames)
+	                if (Counter > ChargeFrames)
 	                {
-	                    ResetCounter(State);
 	                    State = States.StrongReflect;
 	                }
 	                else
 	                {
-	                    IncrementCounter(State);
+	                    IncrementCounter();
                     }
                 }
 	            else
 	            {
-	                ResetCounter(State);
 	                State = States.Reflect;
                 }
                 break;
 	        case States.StrongReflect:
 	            GetComponent<Renderer>().material.color = Color.red;
 
-	            if (StateCounters[State] < StrongReflectFrames)
+	            if (Counter < StrongReflectFrames)
 	            {
-	                IncrementCounter(State);
+	                IncrementCounter();
 	            }
 	            else
 	            {
-	                ResetCounter(State);
 	                State = States.LongCooldown;
 	            }
                 break;
@@ -137,7 +131,7 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
 	    }
     }
 
-    void OnCollisionStay2D(Collision2D coll)
+    void OnTriggerStay2D(Collider2D other)
     {
         if (Time.timeScale == GameControl.Paused)
         {
@@ -146,12 +140,13 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
 
         BallControl ball;
 
-        if ((ball = coll.gameObject.GetComponent<BallControl>()) != null)
+        if ((ball = other.gameObject.GetComponent<BallControl>()) != null)
         {
             switch (State)
             {
                 case States.Idle:
                 case States.Primed:
+                case States.Charging:
                     if (ball.State == BallControl.States.Idle)
                     {
                         ball.State = BallControl.States.Pause;
@@ -161,28 +156,21 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
                     if (ball.State != BallControl.States.Bounce)
                     {
                         HandleBallBounce(ball);
-                        ResetCounter(State);
                         State = States.Idle;
                         ball.State = BallControl.States.Bounce;
                     }
                     break;
                 case States.ShortCooldown:
-                    ball.State = BallControl.States.GameOver;
-                    break;
                 case States.LongCooldown:
-                    ball.State = BallControl.States.GameOver;
-                    break;
-                case States.Charging:
-                    if (ball.State == BallControl.States.Idle)
+                    if (ball.State != BallControl.States.Bounce)
                     {
-                        ball.State = BallControl.States.Pause;
+                        ball.State = BallControl.States.GameOver;
                     }
                     break;
                 case States.StrongReflect:
                     if (ball.State != BallControl.States.Bounce)
                     {
                         HandleBallBounce(ball);
-                        ResetCounter(State);
                         State = States.Idle;
                         ball.State = BallControl.States.Bounce;
                     }
@@ -193,11 +181,11 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
         }
     }
 
-    void OnCollisionExit2D(Collision2D coll)
+    void OnTriggerExit2D(Collider2D other)
     {
         BallControl ball;
 
-        if ((ball = coll.gameObject.GetComponent<BallControl>()) != null)
+        if ((ball = other.gameObject.GetComponent<BallControl>()) != null)
         {
             ball.State = BallControl.States.Idle;
         }
