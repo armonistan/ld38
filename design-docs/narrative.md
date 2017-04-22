@@ -48,6 +48,8 @@ Thanks for coming over to play. It's been a while since I've had anyone other th
 
 She can get pretty busy with work. 
 
+choose between old girlfriend story/engagement story/work promotion/having a child story
+
 
 ### Powerups to integrate
 
