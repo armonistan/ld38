@@ -2,9 +2,10 @@
 using UnityEngine;
 using System.Collections;
 using Assets;
+using Assets.Scripts;
 using UnityEngine.SceneManagement;
 
-public class BallControl : StatefulMonobehavior<BallControl.States>
+public class BallControl : StatefulMonoBehavior<BallControl.States>
 {
     public enum States
     {
