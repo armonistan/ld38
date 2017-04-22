@@ -50,6 +50,8 @@ public class BallControl : StatefulMonobehavior<BallControl.States>
 	        return;
 	    }
 
+	    Debug.Log(Counter);
+
         switch (State)
 	    {
 	        case States.Idle:
@@ -60,13 +62,13 @@ public class BallControl : StatefulMonobehavior<BallControl.States>
 	        case States.Pause:
 	            GetComponent<Renderer>().material.color = Color.yellow;
 
-                if (StateCounters[State] > PauseFrames)
+                if (Counter > PauseFrames)
 	            {
 	                State = States.GameOver;
 	            }
 	            else
 	            {
-	                IncrementCounter(State);
+	                IncrementCounter();
 	            }
 	            break;
 	        case States.Bounce:

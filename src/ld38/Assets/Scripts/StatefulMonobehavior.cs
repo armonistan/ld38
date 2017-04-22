@@ -8,33 +8,24 @@ namespace Assets
 {
     public class StatefulMonobehavior<TEnum> : MonoBehaviour where TEnum : struct, IConvertible, IFormattable
     {
-        public Dictionary<TEnum, int?> StateCounters { get; set; }
-        public TEnum State;
-
-        public StatefulMonobehavior()
+        private TEnum _state;
+        public TEnum State
         {
-            StateCounters = new Dictionary<TEnum, int?>();
-
-            foreach (TEnum state in Enum.GetValues(typeof(TEnum)))
-            {
-                StateCounters.Add(state, 0);
+            get { return _state; }
+            set {
+                if (!_state.Equals(value))
+                {
+                    Counter = 0;
+                    _state = value;
+                }
             }
         }
 
-        protected void IncrementCounter(TEnum state, int amount = 1)
-        {
-            if (StateCounters[state] != null)
-            {
-                StateCounters[state] += amount;
-            }
-        }
+        public int Counter { get; private set; }
 
-        protected void ResetCounter(TEnum state)
+        protected void IncrementCounter(int amount = 1)
         {
-            if (StateCounters[state] != null)
-            {
-                StateCounters[state] = 0;
-            }
+            Counter += amount;
         }
     }
 }
