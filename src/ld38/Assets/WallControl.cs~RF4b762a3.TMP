@@ -1,0 +1,64 @@
+﻿using System;
+using UnityEngine;
+using System.Collections;
+
+public class WallControl : MonoBehaviour
+{
+    public enum States
+    {
+        Idle,
+        HitReady,
+        HitPause,
+        Cooldown,
+        Dead
+    }
+
+    public Vector2 Normal;
+    public States State;
+
+	// Use this for initialization
+	void Start () {
+	
+	}
+	
+	// Update is called once per frame
+	void Update () {
+
+    }
+
+    void OnCollisionEnter2D(Collision2D coll)
+    {
+        BallControl ball;
+
+        if ((ball = coll.gameObject.GetComponent<BallControl>()) != null)
+        {
+            switch (State)
+            {
+                case States.Idle:
+                    break;
+                case States.HitReady:
+                    break;
+                case States.HitPause:
+                    break;
+                case States.Cooldown:
+                    break;
+                case States.Dead:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            HandleBallBounce(ball);
+        }
+    }
+
+    private void HandleBallBounce(BallControl ball)
+    {
+// Source: http://stackoverflow.com/questions/573084/how-to-calculate-bounce-angle
+        var u = (Vector2.Dot(ball.Velocity, Normal) / Vector2.Dot(Normal, Normal)) * Normal;
+        var w = ball.Velocity - u;
+
+        //TODO: Add friction?
+        ball.Velocity = w - u;
+    }
+}
