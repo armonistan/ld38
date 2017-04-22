@@ -9,6 +9,13 @@
 * user interface
     * hint text to describe which wall maps to a key
 
+### Component dimensions
+
+* game window - 1280x720
+* play space - 512x512
+* ball size - 16x16
+* score counter - 32pt Monaco Regular, offset (24, 16), left aligned
+
 ## Base Game Rules
 
 ### Core Gameplay Loop
