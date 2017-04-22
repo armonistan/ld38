@@ -7,7 +7,7 @@
 /[Ll]ibrary/
 sysinfo.txt
 *.stackdump
-*/Library/
+Library/
  
 # ============================================= #
 # Visual Studio / MonoDevelop / Rider generated #
