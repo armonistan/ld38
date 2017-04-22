@@ -1,8 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets;
 
-public class BallControl : MonoBehaviour
+public class BallControl : StatefulMonobehavior<BallControl.States>
 {
+    public enum States
+    {
+        Idle,
+        Pause,
+        Bounce,
+        SweetBounce,
+        GameOver
+    }
+
     public float Speed;
     public float DegAngle;
 

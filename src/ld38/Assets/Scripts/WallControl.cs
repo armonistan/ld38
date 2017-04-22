@@ -2,37 +2,37 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Assets;
 
-public class WallControl : MonoBehaviour
+public class WallControl : StatefulMonobehavior<WallControl.States>
 {
     public enum States
     {
         Idle,
-        HitReady,
-        HitPause,
-        Cooldown,
-        Dead
+        Primed,
+        Reflect,
+        ShortCooldown,
+        LongCooldown,
+        Charging,
+        StrongReflect
     }
 
     public Vector2 Normal;
-    public States State;
+    public KeyCode EnableKey;
 
-    public int HitPauseFrames = 5;
-    public int HitReadyFrames = 10;
-    public int CooldownFrames = 10;
+    public int ChargeFrames = 100;
+    public int ReflectFrames = 5;
+    public int StrongReflectFrames = 5;
+    public int ShortCooldown = 10;
+    public int LongCooldown = 30;
 
     private Vector2? ballInitialVelocity;
-    private Dictionary<States, int> counters;
 	private int PAUSED = 0;
 
 	// Use this for initialization
 	void Start () {
-	    counters = new Dictionary<States, int>();
-
-	    foreach (States state in Enum.GetValues(typeof(States)))
-	    {
-	        counters.Add(state, 0);
-	    }
+	    
 	}
 	
 	// Update is called once per frame
@@ -44,47 +44,99 @@ public class WallControl : MonoBehaviour
 	    switch (State)
 	    {
 	        case States.Idle:
-	            if (Input.GetKey(KeyCode.Space))
+                GetComponent<Renderer>().material.color = Color.white;
+
+	            if (Input.GetKey(EnableKey) && !FindObjectsOfType<WallControl>().Any(wall => wall.EnableKey != EnableKey && (wall.State == States.Primed && wall.State == States.Charging)))
 	            {
-	                State = States.HitReady;
+	                State = States.Primed;
 	            }
 	            break;
-	        case States.HitReady:
-	            if (counters[States.HitReady] > HitReadyFrames)
+	        case States.Primed:
+	            GetComponent<Renderer>().material.color = Color.gray;
+
+	            if (!Input.GetKey(EnableKey))
 	            {
-	                counters[States.HitReady] = 0;
-	                State = States.Cooldown;
-	            }
-	            else
-	            {
-	                counters[States.HitReady]++;
-	            }
-	            break;
-	        case States.HitPause:
-	            if (counters[States.HitPause] > HitPauseFrames)
-	            {
-	                counters[States.HitPause] = 0;
-	                State = States.Cooldown;
-	            }
-	            else
-	            {
-	                counters[States.HitPause]++;
-	            }
-                break;
-	        case States.Cooldown:
-	            if (counters[States.Cooldown] > CooldownFrames)
-	            {
-	                counters[States.Cooldown] = 0;
 	                State = States.Idle;
 	            }
+                else if (Input.GetKey(KeyCode.Space))
+	            {
+	                State = States.Charging;
+	            }
+	            break;
+            case States.Reflect:
+                GetComponent<Renderer>().material.color = Color.blue;
+
+                if (StateCounters[State] < ReflectFrames)
+                {
+                    IncrementCounter(State);
+                }
+                else
+                {
+                    ResetCounter(State);
+                    State = States.ShortCooldown;
+                }
+                break;
+	        case States.ShortCooldown:
+	            GetComponent<Renderer>().material.color = Color.cyan;
+
+	            if (StateCounters[State] < ShortCooldown)
+	            {
+	                IncrementCounter(State);
+	            }
 	            else
 	            {
-	                counters[States.Cooldown]++;
+	                ResetCounter(State);
+	                State = States.Idle;
 	            }
                 break;
-	        case States.Dead:
-	            GetComponent<Renderer>().enabled = false;
-	            break;
+	        case States.LongCooldown:
+	            GetComponent<Renderer>().material.color = Color.magenta;
+
+	            if (StateCounters[State] < LongCooldown)
+	            {
+	                IncrementCounter(State);
+	            }
+	            else
+	            {
+	                ResetCounter(State);
+	                State = States.Idle;
+	            }
+                break;
+	        case States.Charging:
+	            GetComponent<Renderer>().material.color = Color.yellow;
+
+	            if (Input.GetKey(EnableKey) && Input.GetKey(KeyCode.Space))
+	            {
+	                if (StateCounters[State] > ChargeFrames)
+	                {
+	                    ResetCounter(State);
+	                    State = States.StrongReflect;
+	                }
+	                else
+	                {
+	                    
+	                    IncrementCounter(State);
+                    }
+                }
+	            else
+	            {
+	                ResetCounter(State);
+	                State = States.Reflect;
+                }
+                break;
+	        case States.StrongReflect:
+	            GetComponent<Renderer>().material.color = Color.red;
+
+	            if (StateCounters[State] < StrongReflectFrames)
+	            {
+	                IncrementCounter(State);
+	            }
+	            else
+	            {
+	                ResetCounter(State);
+	                State = States.LongCooldown;
+	            }
+                break;
 	        default:
 	            throw new ArgumentOutOfRangeException();
 	    }
@@ -99,37 +151,22 @@ public class WallControl : MonoBehaviour
             switch (State)
             {
                 case States.Idle:
-                    if (ball.Velocity == Vector2.zero)
+                    if (ball.State == BallControl.States.Idle)
                     {
-                        Debug.Log("wat");
-                    }
-
-                    ballInitialVelocity = ball.Velocity;
-                    ball.Velocity = Vector2.zero;
-                    counters[States.HitPause] = 0;
-                    State = States.HitPause;
-                    break;
-                case States.HitReady:
-                    HandleBallBounce(ball, ball.Velocity);
-                    GetComponent<Renderer>().material.color = Color.blue;
-                    State = States.Cooldown;
-                    break;
-                case States.HitPause:
-                    if (counters[States.HitPause] > HitPauseFrames)
-                    {
-                        State = States.Dead;
-                    }
-                    else if (Input.GetKey(KeyCode.Space))
-                    {
-                        HandleBallBounce(ball, ballInitialVelocity.Value);
-                        GetComponent<Renderer>().material.color = Color.green;
-                        ballInitialVelocity = null;
-                        State = States.Cooldown;
+                        ball.State = BallControl.States.Pause;
                     }
                     break;
-                case States.Cooldown:
+                case States.Primed:
                     break;
-                case States.Dead:
+                case States.Reflect:
+                    break;
+                case States.ShortCooldown:
+                    break;
+                case States.LongCooldown:
+                    break;
+                case States.Charging:
+                    break;
+                case States.StrongReflect:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
