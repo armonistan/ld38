@@ -51,7 +51,9 @@
 * space bar
   * press to engage selected wall
   * engaged walls have slight cooldown after firing
-  * OPT - hold to 'charge' wall bounce power
+  * hold to 'charge' wall bounce power
+* left arrow, right arrow
+  * add directional influence to the ball so it will try to turn as it flies
 * E
   * pause the game
 * OPT - mouse & left click
@@ -65,10 +67,15 @@
 
 * Game objects appear within the play space
   * ball can collide with them, no timed input necessary for successful collision
-  * OPT - durability of objects so that they eventually break
-  * OPT - object causes powerup
+  * durability of objects so that they eventually break
+    * three concentric circles
+    * each hit breaks off the outermost circle
+    * first two circles are normal reflects
+    * third circle is a strong reflect
+  * object causes powerup
+    * powerup objects have points in the outer two circles
+    * innermost circle is a powerup
   * OPT - objects alleviate timed failure condition
-  * OPT - points awarded on bounce
 
 * walls undergo change over time
   * OPT - constantly closing in towards ball
@@ -81,6 +88,8 @@
   * OPT - recharge timer
   * OPT - wall bounces recharge ripple power
 
+* arrow keys control another object that the ball always bounces off of
+
 * powerups can be acquired to adjust game mechanics
   * speed up
   * slow down
@@ -89,6 +98,13 @@
   * point multiplier
     * OPT - persistent
     * OPT - fading over time, collecting another refreshes meter
+    * OPT - breaking one turns another into a star powerup for a time, getting that
+  * stronk man - every object breaks in one hit
+  * change size of playable area
+  * bigger or smaller ball
+  * pointmania
+  * bouncy house
+    * walls always in reflect state
 
 * ball speeds up with each successful bounce
 
