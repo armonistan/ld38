@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using Assets;
+using UnityEngine.SceneManagement;
 
 public class BallControl : StatefulMonobehavior<BallControl.States>
 {
@@ -9,14 +11,13 @@ public class BallControl : StatefulMonobehavior<BallControl.States>
         Idle,
         Pause,
         Bounce,
-        SweetBounce,
         GameOver
     }
 
     public float Speed;
     public float DegAngle;
 
-	private int PAUSED = 0;
+    public int PauseFrames = 5;
 
     public float RadAngle
     {
@@ -44,10 +45,42 @@ public class BallControl : StatefulMonobehavior<BallControl.States>
 	
 	// Update is called once per frame
 	void Update () {
-		if (Time.timeScale == PAUSED) {
-			return;
-		}		
+	    if (Time.timeScale == GameControl.Paused)
+	    {
+	        return;
+	    }
 
-	    this.gameObject.transform.Translate(Velocity);
+	    Debug.Log(Counter);
+
+        switch (State)
+	    {
+	        case States.Idle:
+                GetComponent<Renderer>().material.color = Color.white;
+
+	            this.gameObject.transform.Translate(Velocity);
+                break;
+	        case States.Pause:
+	            GetComponent<Renderer>().material.color = Color.yellow;
+
+                if (Counter > PauseFrames)
+	            {
+	                State = States.GameOver;
+	            }
+	            else
+	            {
+	                IncrementCounter();
+	            }
+	            break;
+	        case States.Bounce:
+	            GetComponent<Renderer>().material.color = Color.red;
+
+                this.gameObject.transform.Translate(Velocity);
+                break;
+	        case States.GameOver:
+                SceneManager.LoadScene("TestBed");
+	            break;
+	        default:
+	            throw new ArgumentOutOfRangeException();
+	    }
 	}
 }
