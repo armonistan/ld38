@@ -16,6 +16,8 @@ public class BallControl : StatefulMonobehavior<BallControl.States>
     public float Speed;
     public float DegAngle;
 
+	private int PAUSED = 0;
+
     public float RadAngle
     {
         get { return Mathf.Deg2Rad * DegAngle; }
@@ -42,6 +44,10 @@ public class BallControl : StatefulMonobehavior<BallControl.States>
 	
 	// Update is called once per frame
 	void Update () {
+		if (Time.timeScale == PAUSED) {
+			return;
+		}		
+
 	    this.gameObject.transform.Translate(Velocity);
 	}
 }
