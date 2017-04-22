@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
-namespace Assets
+namespace Assets.Scripts
 {
-    public class StatefulMonobehavior<TEnum> : MonoBehaviour where TEnum : struct, IConvertible, IFormattable
+    public class StatefulMonoBehavior<TEnum> : MonoBehaviour where TEnum : struct, IConvertible, IFormattable
     {
         private TEnum _state;
         public TEnum State
@@ -21,7 +18,7 @@ namespace Assets
             }
         }
 
-        public int Counter { get; private set; }
+        protected int Counter { get; private set; }
 
         protected void IncrementCounter(int amount = 1)
         {
