@@ -15,6 +15,7 @@
 * play space - 512x512
 * ball size - 16x16
 * score counter - 32pt Monaco Regular, offset (24, 16), left aligned
+    * [Monaco on Github](https://github.com/todylu/monaco.ttf)
 
 ## Base Game Rules
 
