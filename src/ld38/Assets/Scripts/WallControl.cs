@@ -42,7 +42,7 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
 	        case States.Idle:
                 GetComponent<Renderer>().material.color = Color.white;
 
-	            if (Input.GetKey(EnableKey) && !FindObjectsOfType<WallControl>().Any(wall => wall.EnableKey != EnableKey && (wall.State == States.Primed && wall.State == States.Charging)))
+	            if (Input.GetKey(EnableKey) && !FindObjectsOfType<WallControl>().Any(wall => wall.EnableKey != EnableKey && (wall.State == States.Primed || wall.State == States.Charging)))
 	            {
 	                State = States.Primed;
 	            }
@@ -158,7 +158,7 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
                     }
                     break;
                 case States.Reflect:
-                    if (ball.State == BallControl.States.Pause)
+                    if (ball.State != BallControl.States.Bounce)
                     {
                         HandleBallBounce(ball);
                         ResetCounter(State);
@@ -179,7 +179,7 @@ public class WallControl : StatefulMonobehavior<WallControl.States>
                     }
                     break;
                 case States.StrongReflect:
-                    if (ball.State == BallControl.States.Pause)
+                    if (ball.State != BallControl.States.Bounce)
                     {
                         HandleBallBounce(ball);
                         ResetCounter(State);
