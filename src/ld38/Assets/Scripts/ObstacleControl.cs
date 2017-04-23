@@ -10,6 +10,7 @@ namespace Assets.Scripts
     {
         public enum States
         {
+            Spawning,
             Full,
             TwoThirds,
             OneThird
@@ -29,12 +30,14 @@ namespace Assets.Scripts
         public class ObstacleSprites
         {
             public PowerupType PowerupType;
+            public Sprite SpawningSprite;
             public Sprite FullSprite;
             public Sprite TwoThirdsSprite;
             public Sprite OneThirdSprite;
         }
 
         public PowerupType CurrentPowerupType;
+        public int SpawnFrames = 30;
         public ObstacleSprites[] Sprites;
 
         private SpriteRenderer _spriteRenderer;
@@ -52,6 +55,18 @@ namespace Assets.Scripts
 
             switch (State)
             {
+                case States.Spawning:
+                    _spriteRenderer.sprite = currentSprite.SpawningSprite;
+
+                    if (Counter > SpawnFrames)
+                    {
+                        State = States.Full;
+                    }
+                    else
+                    {
+                        IncrementCounter();
+                    }
+                    break;
                 case States.Full:
                     _spriteRenderer.sprite = currentSprite.FullSprite;
                     break;

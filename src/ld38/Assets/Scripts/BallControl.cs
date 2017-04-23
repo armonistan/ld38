@@ -156,7 +156,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
     private void HandleObstacle(ObstacleControl obs)
     {
-        if (State == States.Idle)
+        if (State == States.Idle && obs.State != ObstacleControl.States.Spawning)
         {
 			if (obs.State < ObstacleControl.States.OneThird)
             {
