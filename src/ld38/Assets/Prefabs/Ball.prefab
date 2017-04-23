@@ -74,15 +74,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ec9232050a719d4ea7b24640bb74e2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DegAngle: 45
+  DegAngle: 0
   Speed: 4
   SpeedClasses:
+  - 1
   - 2
-  - 4
-  - 6
+  - 3
   CurrentSpeedClass: 1
   BallSteeringMagnitude: 1
-  Scene: TestBed
   PauseFrames: 5
   ActivePowerup: 0
   LeftBallSteering: 276
