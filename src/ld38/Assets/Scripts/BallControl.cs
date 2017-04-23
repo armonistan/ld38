@@ -18,6 +18,11 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
     public int PauseFrames = 5;
 
+    public ObstacleControl.PowerupType ActivePowerup;
+    public int PowerupFrames;
+
+    private int _powerupCounter;
+
     public float RadAngle
     {
         get { return Mathf.Deg2Rad * DegAngle; }
@@ -79,6 +84,16 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 	        default:
 	            throw new ArgumentOutOfRangeException();
 	    }
+
+	    if (_powerupCounter > PowerupFrames)
+	    {
+            _powerupCounter = 0;
+            ActivePowerup = ObstacleControl.PowerupType.None;
+	    }
+        else if (ActivePowerup != ObstacleControl.PowerupType.None)
+	    {
+	        _powerupCounter++;
+	    }
 	}
 
     void OnTriggerStay2D(Collider2D other)
@@ -130,6 +145,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             {
                 Destroy(obs.gameObject);
                 State = States.Idle;
+                _powerupCounter = 0;
+                ActivePowerup = obs.CurrentPowerupType;
             }
         }
     }
