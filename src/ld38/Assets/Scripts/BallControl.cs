@@ -89,20 +89,38 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         }
 
         WallControl wall;
+        ObstacleControl obs;
 
         if ((wall = other.gameObject.GetComponent<WallControl>()) != null)
         {
             HandleWall(wall);
+        }
+        else if ((obs = other.GetComponent<ObstacleControl>()) != null)
+        {
+            HandleObstacle(obs);
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         WallControl wall;
+        ObstacleControl obs;
 
         if ((wall = other.gameObject.GetComponent<WallControl>()) != null)
         {
             State = States.Idle;
+        }
+        else if ((obs = other.GetComponent<ObstacleControl>()) != null)
+        {
+            State = States.Idle;
+        }
+    }
+
+    private void HandleObstacle(ObstacleControl obs)
+    {
+        if (State == States.Idle)
+        {
+            HandleBounce(transform.position - obs.transform.position);
         }
     }
 
@@ -121,12 +139,12 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.Reflect:
                 if (State == States.Pause)
                 {
-                    HandleWallBounce(wall);
+                    HandleBounce(wall.Normal);
                     wall.State = WallControl.States.Idle;
                 }
                 else if (State == States.Idle)
                 {
-                    HandleWallBounce(wall);
+                    HandleBounce(wall.Normal);
                     wall.State = WallControl.States.ShortCooldown;
                 }
                 break;
@@ -140,12 +158,12 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.StrongReflect:
                 if (State == States.Pause)
                 {
-                    HandleWallBounce(wall);
+                    HandleBounce(wall.Normal);
                     wall.State = WallControl.States.Idle;
                 }
                 else if (State == States.Idle)
                 {
-                    HandleWallBounce(wall);
+                    HandleBounce(wall.Normal);
                     wall.State = WallControl.States.ShortCooldown;
                 }
                 break;
@@ -154,10 +172,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         }
     }
 
-    private void HandleWallBounce(WallControl wall)
+    private void HandleBounce(Vector2 normal)
     {
         // Source: http://stackoverflow.com/questions/573084/how-to-calculate-bounce-angle
-        var u = (Vector2.Dot(Velocity, wall.Normal) / Vector2.Dot(wall.Normal, wall.Normal)) * wall.Normal;
+        var u = (Vector2.Dot(Velocity, normal) / Vector2.Dot(normal, normal)) * normal;
         var w = Velocity - u;
 
         //TODO: Add friction?
