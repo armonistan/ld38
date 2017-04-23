@@ -199,7 +199,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
                     if (Counter > PauseFrames && ActivePowerup == ObstacleControl.PowerupType.Shield)
                     {
-                        HandleBounce(wall.Normal, CurrentSpeedClass, false);
+                        HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
                         ActivePowerup = ObstacleControl.PowerupType.None;
                     }
                     else
@@ -211,8 +211,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.Reflect:
                 if (State == States.Pause)
                 {
-					//sweet spot scoring
-                    HandleBounce(wall.Normal, CurrentSpeedClass, false);
+                    //sweet spot scoring
+                    HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
                     if (wall.NeedsEnabled) 
                     {
 						wall.State = WallControl.States.Idle;
@@ -224,7 +224,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 else if (State == States.Idle)
                 {
-                    HandleBounce(wall.Normal, CurrentSpeedClass, false);
+                    HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
                     wall.State = WallControl.States.ShortCooldown;
                 }
                 break;
@@ -234,7 +234,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
                     if (ActivePowerup == ObstacleControl.PowerupType.Shield)
                     {
-                        HandleBounce(wall.Normal, CurrentSpeedClass, false);
+                        HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
                         ActivePowerup = ObstacleControl.PowerupType.None;
                     }
                     else
@@ -247,7 +247,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 if (State == States.Pause)
                 {
                     //sweet spot scoring
-                    HandleBounce(wall.Normal, CurrentSpeedClass + 1, true);
+                    HandleWallBounce(wall.Normal, CurrentSpeedClass + 1, true);
 					if (wall.NeedsEnabled) 
                     {
 						wall.State = WallControl.States.Idle;
@@ -259,13 +259,19 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 else if (State == States.Idle)
                 {
-                    HandleBounce(wall.Normal, CurrentSpeedClass + 1, true);
+                    HandleWallBounce(wall.Normal, CurrentSpeedClass + 1, true);
                     wall.State = WallControl.States.ShortCooldown;
                 }
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
+
+    private void HandleWallBounce(Vector2 normal, int newSpeedClass, bool forceNewSpeed)
+    {
+        HandleBounce(normal, newSpeedClass, forceNewSpeed);
+        _spawnControl.IncrementNumberOfBouncesSinceLastSpawnCounter();
     }
 
     private void HandleBounce(Vector2 normal, int newSpeedClass, bool forceNewSpeed)
@@ -290,6 +296,5 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         Velocity = w - u;
 
         State = States.Bounce;
-		_spawnControl.IncrementNumberOfBouncesSinceLastSpawnCounter ();
     }
 }
