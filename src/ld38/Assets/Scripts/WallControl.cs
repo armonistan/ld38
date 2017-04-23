@@ -28,6 +28,8 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 
 	public bool NeedsEnabled = true;
 
+	public ScoreManager ScoreManager;
+
 	// Use this for initialization
 	void Start () {
 	    if (this.NeedsEnabled)
@@ -37,6 +39,11 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 	    else
 	    {
 	    	State = States.Primed;
+	    }
+
+	    if (ScoreManager == null) 
+	    {
+	    	ScoreManager = (ScoreManager)FindObjectOfType(typeof(ScoreManager));
 	    }
 	}
 	
