@@ -13,12 +13,20 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         GameOver
     }
 
+	public float DegAngle;
+	public float StrongReflectMultiplier = 2;
     public float Speed;
-    public float DegAngle;
-
+	public float MaxSpeed = 4;
+	public float BallSteeringMagnitude = 1;
+    
 	public string Scene = "TestBed";
 
     public int PauseFrames = 5;
+
+    public ObstacleControl.PowerupType ActivePowerup;
+    public int PowerupFrames;
+
+    private int _powerupCounter;
 
     public float RadAngle
     {
@@ -26,19 +34,30 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         set { DegAngle = value * Mathf.Rad2Deg; }
     }
 
-    public Vector2 Velocity
+	public KeyCode LeftBallSteering = KeyCode.LeftArrow;
+	public KeyCode RightBallSteering = KeyCode.RightArrow;
+
+	public Vector2 Velocity
     {
         get
         {
-            return new Vector2(Mathf.Cos(RadAngle), Mathf.Sin(RadAngle)) * Speed * Time.deltaTime;
-        }
+			if (Input.GetKey (LeftBallSteering)) {
+				RadAngle += (BallSteeringMagnitude* Time.deltaTime);
+			} else if (Input.GetKey (RightBallSteering)) {
+				RadAngle -= (BallSteeringMagnitude* Time.deltaTime);
+			}
+			return new Vector2 (Mathf.Cos (RadAngle), Mathf.Sin (RadAngle)) * Speed * Time.deltaTime;
+		}
         set
         {
             Speed = value.magnitude / Time.deltaTime;
+			if (Speed > MaxSpeed) {
+				Speed = MaxSpeed;
+			}
             RadAngle = Mathf.Atan2(value.y, value.x);
         }
     }
-
+		
     // Use this for initialization
 	void Start () {
 		
@@ -53,11 +72,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
         switch (State)
 	    {
-	        case States.Idle:
-                GetComponent<Renderer>().material.color = Color.white;
-
-	            gameObject.transform.Translate(Velocity);
-                break;
+		case States.Idle:
+				GetComponent<Renderer> ().material.color = Color.white;
+				gameObject.transform.Translate(Velocity);
+	            break;
 	        case States.Pause:
 	            GetComponent<Renderer>().material.color = Color.yellow;
 
@@ -70,16 +88,26 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 	                IncrementCounter();
 	            }
 	            break;
-	        case States.Bounce:
-	            GetComponent<Renderer>().material.color = Color.red;
+			case States.Bounce:
+				GetComponent<Renderer> ().material.color = Color.red;
 
-                gameObject.transform.Translate(Velocity);
+				gameObject.transform.Translate(Velocity);
                 break;
 	        case States.GameOver:
 				SceneManager.LoadScene(this.Scene);
 	            break;
 	        default:
 	            throw new ArgumentOutOfRangeException();
+	    }
+
+	    if (_powerupCounter > PowerupFrames)
+	    {
+            _powerupCounter = 0;
+            ActivePowerup = ObstacleControl.PowerupType.None;
+	    }
+        else if (ActivePowerup != ObstacleControl.PowerupType.None)
+	    {
+	        _powerupCounter++;
 	    }
 	}
 
@@ -123,8 +151,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         if (State == States.Idle)
         {
             HandleBounce(transform.position - obs.transform.position);
-
-            if (obs.State < ObstacleControl.States.OneThird)
+            
+			if (obs.State < ObstacleControl.States.OneThird)
             {
                 obs.State = obs.State + 1;
             }
@@ -132,7 +160,9 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             {
                 Destroy(obs.gameObject);
                 State = States.Idle;
-            }
+                _powerupCounter = 0;
+                ActivePowerup = obs.CurrentPowerupType;
+            }			
         }
     }
 
@@ -151,6 +181,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.Reflect:
                 if (State == States.Pause)
                 {
+					//sweet spot scoring
                     HandleBounce(wall.Normal);
                     wall.State = WallControl.States.Idle;
                 }
@@ -170,12 +201,13 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.StrongReflect:
                 if (State == States.Pause)
                 {
-                    HandleBounce(wall.Normal);
+					//sweet spot scoring
+                    HandleStrongBounce(wall.Normal);
                     wall.State = WallControl.States.Idle;
                 }
                 else if (State == States.Idle)
                 {
-                    HandleBounce(wall.Normal);
+                    HandleStrongBounce(wall.Normal);
                     wall.State = WallControl.States.ShortCooldown;
                 }
                 break;
@@ -195,4 +227,9 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
         State = States.Bounce;
     }
+
+	private void HandleStrongBounce(Vector2 normal){
+		Speed *= StrongReflectMultiplier;
+		HandleBounce (normal);
+	}
 }
