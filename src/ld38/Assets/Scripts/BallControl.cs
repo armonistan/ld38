@@ -25,6 +25,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     public int PauseFrames = 5;
 
     public ObstacleControl.PowerupType ActivePowerup;
+	private SpawnControl _spawnControl;
 
     public float RadAngle
     {
@@ -50,7 +51,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 		
     // Use this for initialization
 	void Start () {
-		
+		_spawnControl = UnityEngine.Object.FindObjectOfType<SpawnControl> ();
 	}
 	
 	// Update is called once per frame
@@ -289,5 +290,6 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         Velocity = w - u;
 
         State = States.Bounce;
+		_spawnControl.IncrementNumberOfBouncesSinceLastSpawnCounter ();
     }
 }
