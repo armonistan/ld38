@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\GameControl.cs" />
     <Compile Include="Assets\Scripts\ObstacleControl.cs" />
     <Compile Include="Assets\Scripts\PauseControl.cs" />
+    <Compile Include="Assets\Scripts\ScoreManager.cs" />
     <Compile Include="Assets\Scripts\SpawnControl.cs" />
     <Compile Include="Assets\Scripts\StatefulMonobehavior.cs" />
     <Compile Include="Assets\Scripts\UiControl.cs" />
