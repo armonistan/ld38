@@ -43,7 +43,7 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 	        case States.Idle:
                 GetComponent<Renderer>().material.color = Color.white;
 
-	            if (Input.GetKey(EnableKey) && !FindObjectsOfType<WallControl>().Any(wall => wall.EnableKey != EnableKey && (wall.State == States.Primed || wall.State == States.Charging)))
+	            if (Input.GetKey(EnableKey) && !FindObjectsOfType<WallControl>().Any(wall => wall.EnableKey != EnableKey && (wall.State == States.Primed || wall.State == States.Charging)) && !Input.GetKey(KeyCode.Space))
 	            {
 	                State = States.Primed;
 	            }
@@ -99,20 +99,20 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 	        case States.Charging:
 	            GetComponent<Renderer>().material.color = Color.yellow;
 
-	            if (Input.GetKey(EnableKey) && Input.GetKey(KeyCode.Space))
-	            {
-	                if (Counter > ChargeFrames)
-	                {
-	                    State = States.StrongReflect;
-	                }
-	                else
-	                {
-	                    IncrementCounter();
+                if (Input.GetKey(EnableKey))
+                {
+                    if (Input.GetKey(KeyCode.Space))
+                    {
+                        IncrementCounter();
+                    }
+                    else
+                    {
+                        State = Counter > ChargeFrames ? States.StrongReflect : States.Reflect;
                     }
                 }
-	            else
-	            {
-	                State = States.Reflect;
+                else
+                {
+                    State = States.Reflect;
                 }
                 break;
 	        case States.StrongReflect:
@@ -130,80 +130,5 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 	        default:
 	            throw new ArgumentOutOfRangeException();
 	    }
-    }
-
-    void OnTriggerStay2D(Collider2D other)
-    {
-        if (Time.timeScale == GameControl.Paused)
-        {
-            return;
-        }
-
-        BallControl ball;
-
-        if ((ball = other.gameObject.GetComponent<BallControl>()) != null)
-        {
-            switch (State)
-            {
-                case States.Idle:
-                case States.Primed:
-                case States.Charging:
-                    if (ball.State == BallControl.States.Idle)
-                    {
-                        ball.State = BallControl.States.Pause;
-                    }
-                    break;
-                case States.Reflect:
-                    if (ball.State == BallControl.States.Pause)
-                    {
-                        HandleBallBounce(ball);
-                        State = States.Idle;
-                    }
-                    else if (ball.State == BallControl.States.Idle)
-                    {
-                        HandleBallBounce(ball);
-                        State = States.ShortCooldown;
-                    }
-                    break;
-                case States.ShortCooldown:
-                case States.LongCooldown:
-                    if (ball.State != BallControl.States.Bounce)
-                    {
-                        ball.State = BallControl.States.GameOver;
-                    }
-                    break;
-                case States.StrongReflect:
-                    if (ball.State != BallControl.States.Bounce)
-                    {
-                        HandleBallBounce(ball);
-                        State = States.Idle;
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D other)
-    {
-        BallControl ball;
-
-        if ((ball = other.gameObject.GetComponent<BallControl>()) != null)
-        {
-            ball.State = BallControl.States.Idle;
-        }
-    }
-
-    private void HandleBallBounce(BallControl ball)
-    {
-        // Source: http://stackoverflow.com/questions/573084/how-to-calculate-bounce-angle
-        var u = (Vector2.Dot(ball.Velocity, Normal) / Vector2.Dot(Normal, Normal)) * Normal;
-        var w = ball.Velocity - u;
-
-        //TODO: Add friction?
-        ball.Velocity = w - u;
-
-        ball.State = BallControl.States.Bounce;
     }
 }
