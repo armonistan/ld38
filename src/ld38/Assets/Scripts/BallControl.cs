@@ -134,6 +134,16 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         if (State == States.Idle)
         {
             HandleBounce(transform.position - obs.transform.position);
+
+            if (obs.State < ObstacleControl.States.OneThird)
+            {
+                obs.State = obs.State + 1;
+            }
+            else
+            {
+                Destroy(obs.gameObject);
+                State = States.Idle;
+            }
         }
     }
 
