@@ -87,7 +87,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 				gameObject.transform.Translate(Velocity);
                 break;
 	        case States.GameOver:
-                SceneManager.LoadScene("ArmonTestBed");
+                SceneManager.LoadScene("TestBed");
 	            break;
 	        default:
 	            throw new ArgumentOutOfRangeException();
@@ -134,8 +134,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         if (State == States.Idle)
         {
             HandleBounce(transform.position - obs.transform.position);
-
-            if (obs.State < ObstacleControl.States.OneThird)
+            
+			if (obs.State < ObstacleControl.States.OneThird)
             {
                 obs.State = obs.State + 1;
             }
@@ -143,7 +143,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             {
                 Destroy(obs.gameObject);
                 State = States.Idle;
-            }
+            }			
         }
     }
 
