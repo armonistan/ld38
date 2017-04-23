@@ -30,14 +30,15 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 	public KeyCode LeftBallSteering = KeyCode.LeftArrow;
 	public KeyCode RightBallSteering = KeyCode.RightArrow;
 
-	private float BallSteeringRadian;
-
-	private float PERPENDICULAR_RADIAN = Mathf.PI/2;
-
-    public Vector2 Velocity
+	public Vector2 Velocity
     {
         get
         {
+			if (Input.GetKey (LeftBallSteering)) {
+				RadAngle += (BallSteeringMagnitude* Time.deltaTime);
+			} else if (Input.GetKey (RightBallSteering)) {
+				RadAngle -= (BallSteeringMagnitude* Time.deltaTime);
+			}
 			return new Vector2 (Mathf.Cos (RadAngle), Mathf.Sin (RadAngle)) * Speed * Time.deltaTime;
 		}
         set
@@ -49,19 +50,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             RadAngle = Mathf.Atan2(value.y, value.x);
         }
     }
-
-	public Vector2 BallSteeringVector
-	{
-		get
-		{
-			BallSteeringRadian = (PERPENDICULAR_RADIAN + RadAngle) % (Mathf.PI * 2);
-
-			return new Vector2 (Mathf.Cos (BallSteeringRadian), Mathf.Sin (BallSteeringRadian)) * BallSteeringMagnitude * Time.deltaTime;
-		}
-	}
-
-
-
+		
     // Use this for initialization
 	void Start () {
 	
@@ -78,7 +67,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 	    {
 		case States.Idle:
 				GetComponent<Renderer> ().material.color = Color.white;
-				UpdateBallPosition ();
+				gameObject.transform.Translate(Velocity);
 	            break;
 	        case States.Pause:
 	            GetComponent<Renderer>().material.color = Color.yellow;
@@ -95,7 +84,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 			case States.Bounce:
 				GetComponent<Renderer> ().material.color = Color.red;
 
-				UpdateBallPosition ();
+				gameObject.transform.Translate(Velocity);
                 break;
 	        case States.GameOver:
                 SceneManager.LoadScene("ArmonTestBed");
@@ -213,15 +202,5 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 	private void HandleStrongBounce(Vector2 normal){
 		Speed *= StrongReflectMultiplier;
 		HandleBounce (normal);
-	}
-
-	private void UpdateBallPosition(){
-		if (Input.GetKey (LeftBallSteering)) {
-			Velocity += BallSteeringVector;
-		} else if (Input.GetKey (RightBallSteering)) {
-			Velocity -= BallSteeringVector;
-		}
-
-		gameObject.transform.Translate(Velocity);
 	}
 }
