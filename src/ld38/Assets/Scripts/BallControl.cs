@@ -25,6 +25,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     public int PowerupFrames;
 
     private int _powerupCounter;
+	private SpawnControl _spawnControl;
 
     public float RadAngle
     {
@@ -58,7 +59,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 		
     // Use this for initialization
 	void Start () {
-	
+		_spawnControl = UnityEngine.Object.FindObjectOfType<SpawnControl> ();
 	}
 	
 	// Update is called once per frame
@@ -92,7 +93,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 				gameObject.transform.Translate(Velocity);
                 break;
 	        case States.GameOver:
-                SceneManager.LoadScene("TestBed");
+                SceneManager.LoadScene("ArmonTestBed");
 	            break;
 	        default:
 	            throw new ArgumentOutOfRangeException();
@@ -224,6 +225,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         Velocity = w - u;
 
         State = States.Bounce;
+		_spawnControl.IncrementNumberOfBouncesSinceLastSpawnCounter ();
     }
 
 	private void HandleStrongBounce(Vector2 normal){

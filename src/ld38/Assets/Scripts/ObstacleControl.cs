@@ -42,7 +42,7 @@ namespace Assets.Scripts
 
         public void Start()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+			_spriteRenderer = GetComponent<SpriteRenderer>();
             _circleCollider = GetComponent<CircleCollider2D>();
         }
 
