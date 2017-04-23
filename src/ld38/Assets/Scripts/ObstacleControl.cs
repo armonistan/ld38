@@ -16,27 +16,17 @@ namespace Assets.Scripts
             OneThird
         }
 
-        public enum PowerupType
-        {
-            None,
-            Multiball,
-            Slower,
-            Faster,
-            Shield,
-            Pointmania
-        }
-
         [Serializable]
         public class ObstacleSprites
         {
-            public PowerupType PowerupType;
+            public PowerupControl.PowerupType PowerupType;
             public Sprite SpawningSprite;
             public Sprite FullSprite;
             public Sprite TwoThirdsSprite;
             public Sprite OneThirdSprite;
         }
 
-        public PowerupType CurrentPowerupType;
+        public PowerupControl.PowerupType CurrentPowerupType;
         public int SpawnFrames = 30;
         public ObstacleSprites[] Sprites;
 

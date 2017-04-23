@@ -11,17 +11,19 @@ public class SpawnControl : MonoBehaviour
 
     private int _numberOfBouncesSinceLastSpawnCounter;
 
+    private PowerupControl _powerupControl;
+
     // Use this for initialization
     void Start()
     {
         _numberOfBouncesSinceLastSpawnCounter = 0;
+
+        _powerupControl = FindObjectOfType<PowerupControl>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(_numberOfBouncesSinceLastSpawnCounter + "|" + BouncesToSpawn);
-
         if (_numberOfBouncesSinceLastSpawnCounter >= BouncesToSpawn)
         {
             SpawnObstacle();
@@ -33,8 +35,8 @@ public class SpawnControl : MonoBehaviour
         var newObstacle = Instantiate(ObstaclePrefab, GetSpawnPosition(), Quaternion.Euler(0, 0, 0)) as GameObject;
         var obstacleControl = newObstacle.GetComponent<ObstacleControl>();
         obstacleControl.CurrentPowerupType =
-            (ObstacleControl.PowerupType)UnityEngine.Random.Range(0,
-                Enum.GetValues(typeof(ObstacleControl.PowerupType)).Length);
+            (PowerupControl.PowerupType)UnityEngine.Random.Range(0,
+                Enum.GetValues(typeof(PowerupControl.PowerupType)).Length);
 
         _numberOfBouncesSinceLastSpawnCounter -= BouncesToSpawn;
     }
@@ -47,7 +49,13 @@ public class SpawnControl : MonoBehaviour
 
     public void SpawnBall()
     {
-        Instantiate(BallPrefab, GetSpawnPosition(), Quaternion.Euler(0, 0, 0));
+        var ball = Instantiate(BallPrefab, GetSpawnPosition(), Quaternion.Euler(0, 0, 0)) as GameObject;
+
+        if (ball != null && _powerupControl.LastPowerup != PowerupControl.PowerupType.Multiball &&
+            _powerupControl.LastPowerup != PowerupControl.PowerupType.None)
+        {
+            ball.GetComponent<BallControl>().PersonalPowerupType = _powerupControl.LastPowerup;
+        }
     }
 
     public void IncrementNumberOfBouncesSinceLastSpawnCounter()
