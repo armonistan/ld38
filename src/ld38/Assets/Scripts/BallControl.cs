@@ -25,6 +25,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     public int PauseFrames = 5;
 
     public ObstacleControl.PowerupType ActivePowerup;
+	private SpawnControl _spawnControl;
 
     public float RadAngle
     {
@@ -50,7 +51,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 		
     // Use this for initialization
 	void Start () {
-		
+		_spawnControl = UnityEngine.Object.FindObjectOfType<SpawnControl> ();
 	}
 	
 	// Update is called once per frame
@@ -156,7 +157,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
     private void HandleObstacle(ObstacleControl obs)
     {
-        if (State == States.Idle)
+        if (State == States.Idle && obs.State != ObstacleControl.States.Spawning)
         {
 			if (obs.State < ObstacleControl.States.OneThird)
             {
@@ -198,7 +199,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
                     if (Counter > PauseFrames && ActivePowerup == ObstacleControl.PowerupType.Shield)
                     {
-                        HandleBounce(wall.Normal, CurrentSpeedClass, false);
+                        HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
                         ActivePowerup = ObstacleControl.PowerupType.None;
                     }
                     else
@@ -210,8 +211,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.Reflect:
                 if (State == States.Pause)
                 {
-					//sweet spot scoring
-                    HandleBounce(wall.Normal, CurrentSpeedClass, false);
+                    //sweet spot scoring
+                    HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
                     if (wall.NeedsEnabled) 
                     {
 						wall.State = WallControl.States.Idle;
@@ -223,7 +224,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 else if (State == States.Idle)
                 {
-                    HandleBounce(wall.Normal, CurrentSpeedClass, false);
+                    HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
                     wall.State = WallControl.States.ShortCooldown;
                 }
                 break;
@@ -233,7 +234,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
                     if (ActivePowerup == ObstacleControl.PowerupType.Shield)
                     {
-                        HandleBounce(wall.Normal, CurrentSpeedClass, false);
+                        HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
                         ActivePowerup = ObstacleControl.PowerupType.None;
                     }
                     else
@@ -246,7 +247,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 if (State == States.Pause)
                 {
                     //sweet spot scoring
-                    HandleBounce(wall.Normal, CurrentSpeedClass + 1, true);
+                    HandleWallBounce(wall.Normal, CurrentSpeedClass + 1, true);
 					if (wall.NeedsEnabled) 
                     {
 						wall.State = WallControl.States.Idle;
@@ -258,13 +259,19 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 else if (State == States.Idle)
                 {
-                    HandleBounce(wall.Normal, CurrentSpeedClass + 1, true);
+                    HandleWallBounce(wall.Normal, CurrentSpeedClass + 1, true);
                     wall.State = WallControl.States.ShortCooldown;
                 }
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
+
+    private void HandleWallBounce(Vector2 normal, int newSpeedClass, bool forceNewSpeed)
+    {
+        HandleBounce(normal, newSpeedClass, forceNewSpeed);
+        _spawnControl.IncrementNumberOfBouncesSinceLastSpawnCounter();
     }
 
     private void HandleBounce(Vector2 normal, int newSpeedClass, bool forceNewSpeed)
