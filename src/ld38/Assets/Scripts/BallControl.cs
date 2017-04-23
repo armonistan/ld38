@@ -10,8 +10,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     {
         Idle,
         Pause,
-        Bounce,
-        GameOver
+        Bounce
     }
 
 	public float DegAngle;
@@ -19,8 +18,6 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     public float[] SpeedClasses;
     public int CurrentSpeedClass = 0;
 	public float BallSteeringMagnitude = 1;
-    
-	public string Scene = "TestBed";
 
     public int PauseFrames = 5;
 
@@ -51,7 +48,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 		
     // Use this for initialization
 	void Start () {
-		_spawnControl = UnityEngine.Object.FindObjectOfType<SpawnControl> ();
+		_spawnControl = FindObjectOfType<SpawnControl> ();
 	}
 	
 	// Update is called once per frame
@@ -102,7 +99,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 	        case States.Pause:
                 if (ActivePowerup != ObstacleControl.PowerupType.Shield && Counter > PauseFrames)
 	            {
-	                State = States.GameOver;
+	                Destroy(gameObject);
 	            }
 	            else
 	            {
@@ -112,9 +109,6 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 			case States.Bounce:
 				gameObject.transform.Translate(Velocity);
                 break;
-	        case States.GameOver:
-				SceneManager.LoadScene(this.Scene);
-	            break;
 	        default:
 	            throw new ArgumentOutOfRangeException();
 	    }
@@ -180,9 +174,17 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                     HandleBounce(transform.position - obs.transform.position, CurrentSpeedClass + 1, false);
                 }
 
+                if (obs.CurrentPowerupType == ObstacleControl.PowerupType.Multiball)
+                {
+                    FindObjectOfType<SpawnControl>().SpawnBall();
+                    ActivePowerup = ObstacleControl.PowerupType.None;
+                }
+                else
+                {
+                    ActivePowerup = obs.CurrentPowerupType;
+                }
+
                 State = States.Idle;
-                ActivePowerup = obs.CurrentPowerupType;
-                
                 Destroy(obs.gameObject);
             }
         }
@@ -239,7 +241,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                     }
                     else
                     {
-                        State = States.GameOver;
+                        Destroy(gameObject);
                     }
                 }
                 break;

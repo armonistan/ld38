@@ -6,7 +6,6 @@ using Random = UnityEngine.Random;
 public class SpawnControl : MonoBehaviour
 {
     public int BouncesToSpawn = 5;
-    public Bounds SpawnSpace;
     public GameObject ObstaclePrefab;
     public GameObject BallPrefab;
 

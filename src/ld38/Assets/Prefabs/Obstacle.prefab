@@ -53,42 +53,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 180352}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c3df2128d5d0469ab8e8a1e37db6d24, type: 3}
+  m_Script: {fileID: 11500000, guid: eed743a2a0d78fc468791bc9d27dc339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentPowerupType: 0
   SpawnFrames: 30
   Sprites:
   - PowerupType: 0
-    SpawningSprite: {fileID: 21300000, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    FullSprite: {fileID: 21300002, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    TwoThirdsSprite: {fileID: 21300000, guid: 8eb064be7662248d5952810d32095474, type: 3}
-    OneThirdSprite: {fileID: 21300000, guid: 6f46d6692c7ac4fbf99c59f34ea60ab0, type: 3}
+    SpawningSprite: {fileID: 21300000, guid: d1c0afbe6465be5498155e7cc0d497eb, type: 3}
+    FullSprite: {fileID: 21300002, guid: d1c0afbe6465be5498155e7cc0d497eb, type: 3}
+    TwoThirdsSprite: {fileID: 21300000, guid: 2aa800f7f3991e64cb228bf62206c0ca, type: 3}
+    OneThirdSprite: {fileID: 21300000, guid: 73c395f1c6c9a1c4baee492bfe3d6f51, type: 3}
   - PowerupType: 1
-    SpawningSprite: {fileID: 21300000, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    FullSprite: {fileID: 21300002, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    TwoThirdsSprite: {fileID: 21300000, guid: 8eb064be7662248d5952810d32095474, type: 3}
-    OneThirdSprite: {fileID: 21300000, guid: 6f46d6692c7ac4fbf99c59f34ea60ab0, type: 3}
+    SpawningSprite: {fileID: 21300000, guid: 650f2ef4e390e0543b72563949e9c2bf, type: 3}
+    FullSprite: {fileID: 21300002, guid: 650f2ef4e390e0543b72563949e9c2bf, type: 3}
+    TwoThirdsSprite: {fileID: 21300000, guid: b3792d42db8651f4a9fcb8e54f6eef50, type: 3}
+    OneThirdSprite: {fileID: 21300000, guid: 5f9c3037e320a294192332d01ec44b5f, type: 3}
   - PowerupType: 2
-    SpawningSprite: {fileID: 21300000, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    FullSprite: {fileID: 21300002, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    TwoThirdsSprite: {fileID: 21300000, guid: 8eb064be7662248d5952810d32095474, type: 3}
-    OneThirdSprite: {fileID: 21300000, guid: 6f46d6692c7ac4fbf99c59f34ea60ab0, type: 3}
+    SpawningSprite: {fileID: 21300000, guid: 40a9db96df43d0c40b9a50a84497b2d1, type: 3}
+    FullSprite: {fileID: 21300002, guid: 40a9db96df43d0c40b9a50a84497b2d1, type: 3}
+    TwoThirdsSprite: {fileID: 21300000, guid: e8086bac9d896d044928ed031a710cff, type: 3}
+    OneThirdSprite: {fileID: 21300000, guid: be6ae2300548cd347808963261318102, type: 3}
   - PowerupType: 3
-    SpawningSprite: {fileID: 21300000, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    FullSprite: {fileID: 21300002, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    TwoThirdsSprite: {fileID: 21300000, guid: 8eb064be7662248d5952810d32095474, type: 3}
-    OneThirdSprite: {fileID: 21300000, guid: 6f46d6692c7ac4fbf99c59f34ea60ab0, type: 3}
+    SpawningSprite: {fileID: 21300000, guid: 8c2aeec61742da0438b44d69092128e1, type: 3}
+    FullSprite: {fileID: 21300002, guid: 8c2aeec61742da0438b44d69092128e1, type: 3}
+    TwoThirdsSprite: {fileID: 21300000, guid: fad527fe87ade2a4ea0a25088b776074, type: 3}
+    OneThirdSprite: {fileID: 21300000, guid: e77744254768a344281f81841d92f01c, type: 3}
   - PowerupType: 4
-    SpawningSprite: {fileID: 21300000, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    FullSprite: {fileID: 21300002, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    TwoThirdsSprite: {fileID: 21300000, guid: 8eb064be7662248d5952810d32095474, type: 3}
-    OneThirdSprite: {fileID: 21300000, guid: 6f46d6692c7ac4fbf99c59f34ea60ab0, type: 3}
+    SpawningSprite: {fileID: 21300000, guid: d2c5c26f1e36b7549ad499fc129fc78b, type: 3}
+    FullSprite: {fileID: 21300002, guid: d2c5c26f1e36b7549ad499fc129fc78b, type: 3}
+    TwoThirdsSprite: {fileID: 21300000, guid: 60377e7d11e0a2b498425bb7ecfe78df, type: 3}
+    OneThirdSprite: {fileID: 21300000, guid: c2a9a74e9d62e8849bfdd19731b069a3, type: 3}
   - PowerupType: 5
-    SpawningSprite: {fileID: 21300000, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    FullSprite: {fileID: 21300002, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
-    TwoThirdsSprite: {fileID: 21300000, guid: 8eb064be7662248d5952810d32095474, type: 3}
-    OneThirdSprite: {fileID: 21300000, guid: 6f46d6692c7ac4fbf99c59f34ea60ab0, type: 3}
+    SpawningSprite: {fileID: 21300000, guid: 742153292d58f4041baa2d2154af3f7f, type: 3}
+    FullSprite: {fileID: 21300002, guid: 742153292d58f4041baa2d2154af3f7f, type: 3}
+    TwoThirdsSprite: {fileID: 21300000, guid: 249fe7fa0c5623048a73b225c56d5659, type: 3}
+    OneThirdSprite: {fileID: 21300000, guid: f4f46cbfbc3bad54e9be5d5397912be8, type: 3}
 --- !u!212 &21261406
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -115,7 +115,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 9b07330dec9b44ff29574fb506de732c, type: 3}
+  m_Sprite: {fileID: 21300002, guid: d1c0afbe6465be5498155e7cc0d497eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
