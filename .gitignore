@@ -25,6 +25,9 @@ Library/
 /.idea*/
 /*/**/*.meta
 /*.info
+*.csproj
+*.dll
+/*/**/*.sln
  
 # ============ #
 # OS generated #
