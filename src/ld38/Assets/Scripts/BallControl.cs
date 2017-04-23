@@ -183,7 +183,14 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
 					//sweet spot scoring
                     HandleBounce(wall.Normal);
-                    wall.State = WallControl.States.Idle;
+                    if (wall.NeedsEnabled) 
+                    {
+						wall.State = WallControl.States.Idle;
+                    }
+                    else
+                    {
+                    	wall.State = WallControl.States.Primed;
+                    }
                 }
                 else if (State == States.Idle)
                 {
@@ -203,7 +210,14 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
 					//sweet spot scoring
                     HandleStrongBounce(wall.Normal);
-                    wall.State = WallControl.States.Idle;
+					if (wall.NeedsEnabled) 
+                    {
+						wall.State = WallControl.States.Idle;
+                    }
+                    else
+                    {
+                    	wall.State = WallControl.States.Primed;
+                    }
                 }
                 else if (State == States.Idle)
                 {

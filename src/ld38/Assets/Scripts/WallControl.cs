@@ -26,9 +26,18 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
     public int ShortCooldownFrames = 10;
     public int LongCooldownFrames = 30;
 
+	public bool NeedsEnabled = true;
+
 	// Use this for initialization
 	void Start () {
-	    
+	    if (this.NeedsEnabled)
+	    {
+	    	State = States.Idle;
+	    }
+	    else
+	    {
+	    	State = States.Primed;
+	    }
 	}
 	
 	// Update is called once per frame
@@ -40,24 +49,30 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 
         switch (State)
 	    {
-	        case States.Idle:
-                GetComponent<Renderer>().material.color = Color.white;
-
-	            if (Input.GetKey(EnableKey) && !FindObjectsOfType<WallControl>().Any(wall => wall.EnableKey != EnableKey && (wall.State == States.Primed || wall.State == States.Charging)) && !Input.GetKey(KeyCode.Space))
-	            {
-	                State = States.Primed;
-	            }
+		case States.Idle:
+				GetComponent<Renderer> ().material.color = Color.white;
+				if (NeedsEnabled) 
+				{
+					if (Input.GetKey(EnableKey) && !FindObjectsOfType<WallControl>().Any(wall => wall.EnableKey != EnableKey && (wall.State == States.Primed || wall.State == States.Charging)) && !Input.GetKey(KeyCode.Space))
+					{
+						State = States.Primed;
+					}
+				}
 	            break;
 	        case States.Primed:
 	            GetComponent<Renderer>().material.color = Color.gray;
 
-	            if (!Input.GetKey(EnableKey))
+				if (!Input.GetKey(EnableKey) && NeedsEnabled)
 	            {
 	                State = States.Idle;
 	            }
-                else if (Input.GetKey(KeyCode.Space))
+				else if (Input.GetKey(KeyCode.Space) && NeedsEnabled)
 	            {
 	                State = States.Charging;
+	            } 
+	            else if (Input.GetKey(EnableKey) && !NeedsEnabled)
+	            {
+	            	State = States.Charging;
 	            }
 	            break;
             case States.Reflect:
@@ -79,9 +94,13 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 	            {
 	                IncrementCounter();
 	            }
-	            else
+	            else if (NeedsEnabled)
 	            {
 	                State = States.Idle;
+	            }
+	            else
+	            {
+	            	State = States.Primed;
 	            }
                 break;
 	        case States.LongCooldown:
@@ -91,17 +110,21 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 	            {
 	                IncrementCounter();
 	            }
-	            else
+	            else if (NeedsEnabled)
 	            {
 	                State = States.Idle;
+	            }
+	            else
+	            {
+	            	State = States.Primed;
 	            }
                 break;
 	        case States.Charging:
 	            GetComponent<Renderer>().material.color = Color.yellow;
-
+	            
                 if (Input.GetKey(EnableKey))
                 {
-                    if (Input.GetKey(KeyCode.Space))
+                    if ((Input.GetKey(KeyCode.Space) && NeedsEnabled) || !NeedsEnabled)
                     {
                         IncrementCounter();
                     }
@@ -110,9 +133,13 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
                         State = Counter > ChargeFrames ? States.StrongReflect : States.Reflect;
                     }
                 }
-                else
+                else if (NeedsEnabled)
                 {
                     State = States.Reflect;
+                }
+                else
+                {
+					State = Counter > ChargeFrames ? States.StrongReflect : States.Reflect;
                 }
                 break;
 	        case States.StrongReflect:
