@@ -16,6 +16,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     public float Speed;
     public float DegAngle;
 
+	public string Scene = "TestBed";
+
     public int PauseFrames = 5;
 
     public float RadAngle
@@ -39,7 +41,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
     // Use this for initialization
 	void Start () {
-	
+		
 	}
 	
 	// Update is called once per frame
@@ -74,7 +76,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 gameObject.transform.Translate(Velocity);
                 break;
 	        case States.GameOver:
-                SceneManager.LoadScene("TestBed");
+				SceneManager.LoadScene(this.Scene);
 	            break;
 	        default:
 	            throw new ArgumentOutOfRangeException();
