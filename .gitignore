@@ -23,7 +23,6 @@ Library/
 /*.unityproj
 /*.booproj
 /.idea*/
-/*/**/*.meta
 /*.info
 *.csproj
 *.dll

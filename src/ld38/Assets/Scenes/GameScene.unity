@@ -1215,7 +1215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DegAngle: 30
-  Speed: 2000
+  Speed: 200
   SpeedClasses:
   - 200
   - 240
