@@ -20,6 +20,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     public int CurrentSpeedClass = 0;
 	public float BallSteeringMagnitude = 1;
     
+	public string Scene = "TestBed";
+
     public int PauseFrames = 5;
 
     public ObstacleControl.PowerupType ActivePowerup;
@@ -48,7 +50,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 		
     // Use this for initialization
 	void Start () {
-	
+		
 	}
 	
 	// Update is called once per frame
@@ -110,7 +112,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 				gameObject.transform.Translate(Velocity);
                 break;
 	        case States.GameOver:
-                SceneManager.LoadScene("TestBed");
+				SceneManager.LoadScene(this.Scene);
 	            break;
 	        default:
 	            throw new ArgumentOutOfRangeException();
@@ -202,7 +204,14 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
 					//sweet spot scoring
                     HandleBounce(wall.Normal, CurrentSpeedClass, false);
-                    wall.State = WallControl.States.Idle;
+                    if (wall.NeedsEnabled) 
+                    {
+						wall.State = WallControl.States.Idle;
+                    }
+                    else
+                    {
+                    	wall.State = WallControl.States.Primed;
+                    }
                 }
                 else if (State == States.Idle)
                 {
@@ -222,7 +231,14 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
                     //sweet spot scoring
                     HandleBounce(wall.Normal, CurrentSpeedClass + 1, true);
-                    wall.State = WallControl.States.Idle;
+					if (wall.NeedsEnabled) 
+                    {
+						wall.State = WallControl.States.Idle;
+                    }
+                    else
+                    {
+                    	wall.State = WallControl.States.Primed;
+                    }
                 }
                 else if (State == States.Idle)
                 {
