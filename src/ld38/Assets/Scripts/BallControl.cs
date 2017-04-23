@@ -99,7 +99,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 				gameObject.transform.Translate(Velocity);
 	            break;
 	        case States.Pause:
-                if (Counter > PauseFrames)
+                if (ActivePowerup != ObstacleControl.PowerupType.Shield && Counter > PauseFrames)
 	            {
 	                State = States.GameOver;
 	            }
@@ -194,9 +194,17 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.Idle:
             case WallControl.States.Primed:
             case WallControl.States.Charging:
-                if (State == States.Idle)
+                if (State == States.Idle || State == States.Pause)
                 {
-                    State = States.Pause;
+                    if (Counter > PauseFrames && ActivePowerup == ObstacleControl.PowerupType.Shield)
+                    {
+                        HandleBounce(wall.Normal, CurrentSpeedClass, false);
+                        ActivePowerup = ObstacleControl.PowerupType.None;
+                    }
+                    else
+                    {
+                        State = States.Pause;
+                    }
                 }
                 break;
             case WallControl.States.Reflect:
@@ -223,7 +231,15 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.LongCooldown:
                 if (State != States.Bounce)
                 {
-                    State = States.GameOver;
+                    if (ActivePowerup == ObstacleControl.PowerupType.Shield)
+                    {
+                        HandleBounce(wall.Normal, CurrentSpeedClass, false);
+                        ActivePowerup = ObstacleControl.PowerupType.None;
+                    }
+                    else
+                    {
+                        State = States.GameOver;
+                    }
                 }
                 break;
             case WallControl.States.StrongReflect:
@@ -261,12 +277,12 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         {
             if (forceNewSpeed)
             {
-                CurrentSpeedClass = Mathf.Clamp(newSpeedClass, 0, SpeedClasses.Length);
+                CurrentSpeedClass = Mathf.Clamp(newSpeedClass, 0, SpeedClasses.Length - 1);
             }
         }
         else
         {
-            CurrentSpeedClass = Mathf.Clamp(newSpeedClass, 0, SpeedClasses.Length);
+            CurrentSpeedClass = Mathf.Clamp(newSpeedClass, 0, SpeedClasses.Length - 1);
         }
 
         //TODO: Add friction?
