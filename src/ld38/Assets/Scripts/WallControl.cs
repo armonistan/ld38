@@ -17,8 +17,20 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
         StrongReflect
     }
 
+    [Serializable]
+    public class PulseData
+    {
+        public SpriteRenderer Sprite;
+        public GameObject Start;
+        public GameObject Destination;
+    }
+
     public Vector2 Normal;
     public KeyCode EnableKey;
+
+    public PulseData[] Pulses;
+    public float PulseLerpRate = 0.1f;
+    public Color ChargedPulseColor;
 
     public int ChargeFrames = 100;
     public int ReflectFrames = 5;
@@ -66,6 +78,9 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 	    {
 	        return;
 	    }
+
+        LerpPulses((State == States.Primed && NeedsEnabled) || State == States.Charging || State == States.Reflect || State == States.StrongReflect);
+	    SetPulseColor((State == States.Charging && Counter > ChargeFrames) || State == States.StrongReflect);
 
         switch (State)
 	    {
@@ -177,5 +192,23 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 	        default:
 	            throw new ArgumentOutOfRangeException();
 	    }
+    }
+
+    private void LerpPulses(bool on)
+    {
+        foreach (var pulse in Pulses)
+        {
+            var pointB = on ? pulse.Destination.transform.position : pulse.Start.transform.position;
+
+            pulse.Sprite.transform.position = Vector2.Lerp(pulse.Sprite.transform.position, pointB, PulseLerpRate);
+        }
+    }
+
+    public void SetPulseColor(bool charged)
+    {
+        foreach (var pulse in Pulses)
+        {
+            pulse.Sprite.color = charged ? ChargedPulseColor : Color.white;
+        }
     }
 }
