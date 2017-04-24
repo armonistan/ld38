@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class PowerupControl : MonoBehaviour
 {
@@ -25,6 +26,11 @@ public class PowerupControl : MonoBehaviour
     public int PowerupCounter = 0;
     public PowerupDurations[] Durations;
 
+    public PowerupType ActivePowerup
+    {
+        get { return PowerupCounter > 0 ? LastPowerup : PowerupType.None; }
+    }
+
     // Use this for initialization
     void Start () {
 	
@@ -32,7 +38,17 @@ public class PowerupControl : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-	
+	    if (ActivePowerup != LastPowerup)
+	    {
+	        if (LastPowerup == PowerupType.Shield)
+	        {
+	            LastPowerup = PowerupType.None;
+	        }
+	        else
+	        {
+	            SetAllPowerups(PowerupType.None);
+	        }
+	    }
 	}
 
     public void SetAllPowerups(PowerupType power)
@@ -46,6 +62,6 @@ public class PowerupControl : MonoBehaviour
 
         LastPowerup = power;
 
-        //PowerupCounter = 
+        PowerupCounter = Durations.First(duration => duration.PowerupType == power).BounceNumber;
     }
 }

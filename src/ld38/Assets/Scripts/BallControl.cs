@@ -331,7 +331,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     private void HandleWallBounce(Vector2 normal, bool strongBounce)
     {
         HandleBounce(normal, strongBounce);
-        _spawnControl.IncrementNumberOfBouncesSinceLastSpawnCounter();
+        _spawnControl.RegisterBounce();
     }
 
     private void HandleBounce(Vector2 normal, bool strongBounce)

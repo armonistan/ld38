@@ -33,6 +33,7 @@ public class UICounterControl : StatefulMonoBehavior<UICounterControl.States> {
             case States.Empty:
             case States.Filling:
                 int illuminatedBubbles = _spawnControl.GetBouncesSinceLastSpawn();
+
                 for (int i = 0; i < counterBubbles.Length; i++)
                 {
                     Image imageComponent = counterBubbles[i].GetComponent<Image>();
