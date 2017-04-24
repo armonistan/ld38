@@ -21,8 +21,14 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
     public int PauseFrames = 5;
 
+    public int ReflectPoints = 100;
+    public int SweetReflectPoints = 300;
+    public int ObstaclePoints = 200;
+    public int DestroyObstaclePoints = 400;
+
     public ObstacleControl.PowerupType ActivePowerup;
 	private SpawnControl _spawnControl;
+    private UiControl _uiControl;
 
     public float RadAngle
     {
@@ -49,6 +55,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     // Use this for initialization
 	void Start () {
 		_spawnControl = FindObjectOfType<SpawnControl> ();
+        _uiControl = FindObjectOfType<UiControl> ();
 	}
 	
 	// Update is called once per frame
@@ -155,12 +162,18 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         {
 			if (obs.State < ObstacleControl.States.OneThird)
             {
+                //add score for hitting obstacle
+                _uiControl.AddScore(ObstaclePoints);
                 obs.State = obs.State + 1;
 
                 HandleBounce(transform.position - obs.transform.position, CurrentSpeedClass, false);
             }
             else
             {
+                //add score and boost multiplier for breaking obstacle
+                _uiControl.BoostMultiplier();
+                _uiControl.AddScore(SweetReflectPoints);
+
                 if (obs.CurrentPowerupType == ObstacleControl.PowerupType.Faster)
                 {
                     HandleBounce(transform.position - obs.transform.position, 2, true);
@@ -211,9 +224,12 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 break;
             case WallControl.States.Reflect:
+                // set multiplier back to 1, broke a chain of strong hits
+                _uiControl.ResetMultipler();
                 if (State == States.Pause)
                 {
                     //sweet spot scoring
+                    _uiControl.AddScore(SweetReflectPoints);
                     HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
                     if (wall.NeedsEnabled) 
                     {
@@ -226,6 +242,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 else if (State == States.Idle)
                 {
+                    //normal scoring
+                    _uiControl.AddScore(ReflectPoints);
                     HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
                     wall.State = WallControl.States.ShortCooldown;
                 }
@@ -246,9 +264,12 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 break;
             case WallControl.States.StrongReflect:
+                //add one to the current multiplier
+                _uiControl.BoostMultiplier();
                 if (State == States.Pause)
                 {
                     //sweet spot scoring
+                    _uiControl.AddScore(SweetReflectPoints);
                     HandleWallBounce(wall.Normal, CurrentSpeedClass + 1, true);
 					if (wall.NeedsEnabled) 
                     {
@@ -261,6 +282,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 else if (State == States.Idle)
                 {
+                    //normal scoring
+                    _uiControl.AddScore(ReflectPoints);
                     HandleWallBounce(wall.Normal, CurrentSpeedClass + 1, true);
                     wall.State = WallControl.States.ShortCooldown;
                 }
