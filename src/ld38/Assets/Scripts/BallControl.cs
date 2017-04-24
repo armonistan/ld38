@@ -19,12 +19,14 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 	public KeyCode RightBallSteering = KeyCode.RightArrow;
 
     public float Speed = 4;
+    public int StrongReflectBonus = 1;
+    public int BaseSpeedClass = 1;
     public float[] SpeedClasses;
-    public int CurrentSpeedClass = 0;
 
     public int PauseFrames = 5;
 
     public PowerupControl.PowerupType PersonalPowerupType;
+    public int BounceBonus = 0;
 
     public int ReflectPoints = 100;
     public int SweetReflectPoints = 300;
@@ -51,6 +53,26 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         set
         {
             RadAngle = Mathf.Atan2(value.y, value.x);
+        }
+    }
+
+    public int CurrentSpeedClass
+    {
+        get
+        {
+            var powerupBonus = 0;
+
+            switch (PersonalPowerupType)
+            {
+                case PowerupControl.PowerupType.Faster:
+                    powerupBonus = 1;
+                    break;
+                case PowerupControl.PowerupType.Slower:
+                    powerupBonus = -1;
+                    break;
+            }
+
+            return Mathf.Clamp(BaseSpeedClass + powerupBonus + BounceBonus, 0, SpeedClasses.Length - 1);
         }
     }
 
@@ -164,13 +186,15 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     {
         if (State == States.Idle && obs.State != ObstacleControl.States.Spawning)
         {
-			if (obs.State < ObstacleControl.States.OneThird)
+            var obstacleNormal = transform.position - obs.transform.position;
+
+            if (obs.State < ObstacleControl.States.OneThird)
             {
                 //add score for hitting obstacle
                 _uiControl.AddScore(ObstaclePoints);
                 obs.State = obs.State + 1;
 
-                HandleBounce(transform.position - obs.transform.position, CurrentSpeedClass, false);
+                HandleBounce(obstacleNormal, false);
             }
             else
             {
@@ -178,18 +202,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 _uiControl.BoostMultiplier();
                 _uiControl.AddScore(SweetReflectPoints);
 
-                if (obs.CurrentPowerupType == PowerupControl.PowerupType.Faster)
-                {
-                    HandleBounce(transform.position - obs.transform.position, 2, true);
-                }
-                else if (obs.CurrentPowerupType == PowerupControl.PowerupType.Slower)
-                {
-                    HandleBounce(transform.position - obs.transform.position, 0, true);
-                }
-                else
-                {
-                    HandleBounce(transform.position - obs.transform.position, CurrentSpeedClass + 1, false);
-                }
+                HandleBounce(obstacleNormal, true);
 
                 if (obs.CurrentPowerupType == PowerupControl.PowerupType.Multiball)
                 {
@@ -218,7 +231,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
                     if (Counter > PauseFrames && PersonalPowerupType == PowerupControl.PowerupType.Shield)
                     {
-                        HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
+                        HandleWallBounce(wall.Normal, false);
                         PersonalPowerupType = PowerupControl.PowerupType.None;
                     }
                     else
@@ -234,7 +247,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
                     //sweet spot scoring
                     _uiControl.AddScore(SweetReflectPoints);
-                    HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
+                    HandleWallBounce(wall.Normal, false);
                     if (wall.NeedsEnabled) 
                     {
 						wall.State = WallControl.States.Idle;
@@ -248,7 +261,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
                     //normal scoring
                     _uiControl.AddScore(ReflectPoints);
-                    HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
+                    HandleWallBounce(wall.Normal, false);
                     wall.State = WallControl.States.ShortCooldown;
                 }
                 break;
@@ -258,7 +271,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
                     if (PersonalPowerupType == PowerupControl.PowerupType.Shield)
                     {
-                        HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
+                        HandleWallBounce(wall.Normal, false);
                         PersonalPowerupType = PowerupControl.PowerupType.None;
                     }
                     else
@@ -274,7 +287,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
                     //sweet spot scoring
                     _uiControl.AddScore(SweetReflectPoints);
-                    HandleWallBounce(wall.Normal, CurrentSpeedClass + 1, true);
+                    HandleWallBounce(wall.Normal, true);
 					if (wall.NeedsEnabled) 
                     {
 						wall.State = WallControl.States.Idle;
@@ -288,7 +301,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 {
                     //normal scoring
                     _uiControl.AddScore(ReflectPoints);
-                    HandleWallBounce(wall.Normal, CurrentSpeedClass + 1, true);
+                    HandleWallBounce(wall.Normal, true);
                     wall.State = WallControl.States.ShortCooldown;
                 }
                 break;
@@ -297,29 +310,19 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         }
     }
 
-    private void HandleWallBounce(Vector2 normal, int newSpeedClass, bool forceNewSpeed)
+    private void HandleWallBounce(Vector2 normal, bool strongBounce)
     {
-        HandleBounce(normal, newSpeedClass, forceNewSpeed);
+        HandleBounce(normal, strongBounce);
         _spawnControl.IncrementNumberOfBouncesSinceLastSpawnCounter();
     }
 
-    private void HandleBounce(Vector2 normal, int newSpeedClass, bool forceNewSpeed)
+    private void HandleBounce(Vector2 normal, bool strongBounce)
     {
         // Source: http://stackoverflow.com/questions/573084/how-to-calculate-bounce-angle
         var u = (Vector2.Dot(Velocity, normal) / Vector2.Dot(normal, normal)) * normal;
         var w = Velocity - u;
 
-        if (PersonalPowerupType == PowerupControl.PowerupType.Faster || PersonalPowerupType == PowerupControl.PowerupType.Slower)
-        {
-            if (forceNewSpeed)
-            {
-                CurrentSpeedClass = Mathf.Clamp(newSpeedClass, 0, SpeedClasses.Length - 1);
-            }
-        }
-        else
-        {
-            CurrentSpeedClass = Mathf.Clamp(newSpeedClass, 0, SpeedClasses.Length - 1);
-        }
+        BounceBonus = strongBounce ? StrongReflectBonus : 0;
 
         //TODO: Add friction?
         Velocity = w - u;
