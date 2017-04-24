@@ -51,9 +51,29 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 	    	State = States.Primed;
 	    }
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    public void Restart()
+    {
+        if (FindObjectOfType<GameControl>().GetGameState() == GameControl.States.EasyMode)
+        {
+            ChargeFrames = 37;
+            ReflectFrames = 14;
+            StrongReflectFrames = 20;
+            ShortCooldownFrames = 11;
+            LongCooldownFrames = 26;
+        }
+        else if (FindObjectOfType<GameControl>().GetGameState() == GameControl.States.HardMode)
+        {
+            ChargeFrames = 12;
+            ReflectFrames = 9;
+            StrongReflectFrames = 13;
+            ShortCooldownFrames = 10;
+            LongCooldownFrames = 27;
+        }
+    }
+
+    // Update is called once per frame
+    void Update () {
 	    if (Time.timeScale == GameControl.Paused)
 	    {
 	        return;
