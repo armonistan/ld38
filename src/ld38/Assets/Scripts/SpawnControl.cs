@@ -23,16 +23,19 @@ public class SpawnControl : MonoBehaviour
         get { return GetComponent<SpriteRenderer>().bounds; }
     }
 
+    public PowerupControl.PowerupType NextPowerup { get; private set; }
+
     // Use this for initialization
     void Start()
     {
-        _numberOfBouncesSinceLastSpawnCounter = 0;
+        Restart();
         _powerupControl = FindObjectOfType<PowerupControl>();
     }
 
     public void Restart()
     {
         _numberOfBouncesSinceLastSpawnCounter = 0;
+        NextPowerup = GenerateObstaclePowerupType();
     }
 
     // Update is called once per frame
@@ -48,9 +51,9 @@ public class SpawnControl : MonoBehaviour
     {
         var newObstacle = Instantiate(ObstaclePrefab, GetRandomSpawnPoint(SpawnBounds), Quaternion.Euler(0, 0, 0)) as GameObject;
         var obstacleControl = newObstacle.GetComponent<ObstacleControl>();
-        obstacleControl.CurrentPowerupType = GenerateObstaclePowerupType();
+        obstacleControl.CurrentPowerupType = NextPowerup;
 
-        _numberOfBouncesSinceLastSpawnCounter = 0;
+        Restart();
     }
 
     private Vector2 GetSpawnPosition()
@@ -112,7 +115,7 @@ public class SpawnControl : MonoBehaviour
         if (_powerupControl.ActivePowerup != PowerupControl.PowerupType.None)
         {
             _powerupControl.PowerupCounter--;
-            _numberOfBouncesSinceLastSpawnCounter = 0;
+            Restart();
         }
         else
         {
