@@ -91,7 +91,13 @@ public class SpawnControl : MonoBehaviour
         _numberOfBouncesSinceLastSpawnCounter++;
     }
 
-	private PowerupControl.PowerupType GenerateObstaclePowerupType(){
+    public int GetBouncesSinceLastSpawn()
+    {
+        return _numberOfBouncesSinceLastSpawnCounter;
+    }
+
+private PowerupControl.PowerupType GenerateObstaclePowerupType(){
+
 		int weightRange = 0;
 		int[] powerupSpawnWeightsCalculated = new int[6];
 
