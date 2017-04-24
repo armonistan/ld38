@@ -97,6 +97,11 @@ MonoBehaviour:
   SweetReflectPoints: 300
   ObstaclePoints: 200
   DestroyObstaclePoints: 400
+  baseContrail: {fileID: 21300000, guid: 20eeb938e99e3614396712e4a933cf53, type: 3}
+  leftSteeringContrail: {fileID: 21300000, guid: e8def5d16bd468148be72ecf9c3462bc,
+    type: 3}
+  rightSteeringContrail: {fileID: 21300000, guid: bfc23cbc1798aad458a58b9c4d86968b,
+    type: 3}
 --- !u!212 &21217510
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -171,7 +176,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1198588772558034}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12, y: -13.8, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 406186}
@@ -209,11 +214,11 @@ SpriteRenderer:
   m_SortingLayerID: 1538662421
   m_SortingLayer: -1
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: f3298ef68f8f4a347828295fe166da80, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 20eeb938e99e3614396712e4a933cf53, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 39, y: 37}
+  m_Size: {x: 42, y: 23}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
