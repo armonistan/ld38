@@ -55,7 +55,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     // Use this for initialization
 	void Start () {
 		_spawnControl = FindObjectOfType<SpawnControl> ();
-        	_uiControl = FindObjectOfType<UiControl> ();
+        _uiControl = FindObjectOfType<UiControl> ();
 		DegAngle = UnityEngine.Random.Range (0, 360);
 	}
 	
