@@ -35,21 +35,22 @@ public class StoryControl : Assets.Scripts.StatefulMonoBehavior<StoryControl.Sta
     public void Restart()
     {
         _storyText = new List<string>();
-        _storyText.Add("story element 1");
-        _storyText.Add("story element 2");
-        _storyText.Add("story element 3");
-        _storyText.Add("story element 4");
-        _storyText.Add("story element 5");
-        _storyText.Add("story element 6");
-        _storyText.Add("story element 7");
-        _storyText.Add("story element 8");
+        _storyText.Add("Isn't it funny how we can't really tell what anyone else is thinking? How sometimes, we can't even tell what we're thinking?");
+        _storyText.Add("How much of you is actually you? I mean, you think you've got your body, but even that is made up of other living things...");
+        _storyText.Add("We are islands to each other, building hopeful bridges on a troubled sea.");
+        _storyText.Add("I can't decide to make my heart beat again, or prevent my eyes from seeing. These things so core to us are alien to our control.");
+        _storyText.Add("We feel so much like we're part of this huge world. How much of it have you seen though?");
+        _storyText.Add("Is our identity the only thing we are? It sounds really stupid, I know, but if that's it, then the rest of this is pretty unreal.");
+        _storyText.Add("Each of us a world apart -- Alone and yet together like two passing ships.");
+        _storyText.Add("I don't know if you've felt this, but everything gets smaller when you're alone. But friends, family, love... we all add to each other's little worlds.");
+        _storyText.Add("We make things so we can take a little part of ourselves and spread it around. It's in our nature.");
         _storyCursor = 0;
 
         int n = _storyText.Count;
         while (n > 1)
         {
             n--;
-            int k = (int)(Random.Range(0, n + 1));
+            int k = (int)(Random.Range(0, n));
             string value = _storyText[k];
             _storyText[k] = _storyText[n];
             _storyText[n] = value;
