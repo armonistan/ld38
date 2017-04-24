@@ -14,20 +14,25 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     }
 
 	public float DegAngle;
+	public float BallSteeringMagnitude = 1;
+	public KeyCode LeftBallSteering = KeyCode.LeftArrow;
+	public KeyCode RightBallSteering = KeyCode.RightArrow;
+
     public float Speed = 4;
     public float[] SpeedClasses;
     public int CurrentSpeedClass = 0;
-	public float BallSteeringMagnitude = 1;
 
     public int PauseFrames = 5;
+
+    public PowerupControl.PowerupType PersonalPowerupType;
 
     public int ReflectPoints = 100;
     public int SweetReflectPoints = 300;
     public int ObstaclePoints = 200;
     public int DestroyObstaclePoints = 400;
 
-    public ObstacleControl.PowerupType ActivePowerup;
 	private SpawnControl _spawnControl;
+    private PowerupControl _powerupControl;
     private UiControl _uiControl;
 
     public float RadAngle
@@ -35,9 +40,6 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         get { return Mathf.Deg2Rad * DegAngle; }
         set { DegAngle = value * Mathf.Rad2Deg; }
     }
-
-	public KeyCode LeftBallSteering = KeyCode.LeftArrow;
-	public KeyCode RightBallSteering = KeyCode.RightArrow;
 
 	public Vector2 Velocity
     {
@@ -51,17 +53,18 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             RadAngle = Mathf.Atan2(value.y, value.x);
         }
     }
-		
+
     // Use this for initialization
 	void Start () {
-		_spawnControl = FindObjectOfType<SpawnControl> ();
+		_spawnControl = FindObjectOfType<SpawnControl>();
+	    _powerupControl = FindObjectOfType<PowerupControl>();
         _uiControl = FindObjectOfType<UiControl> ();
 		DegAngle = UnityEngine.Random.Range (0, 360);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	    if (Time.timeScale == GameControl.Paused)
+		if (Time.timeScale == GameControl.Paused)
 	    {
 	        return;
 	    }
@@ -75,24 +78,24 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 	        RadAngle -= (BallSteeringMagnitude * Time.deltaTime);
 	    }
 
-	    switch (ActivePowerup)
+	    switch (PersonalPowerupType)
 	    {
-	        case ObstacleControl.PowerupType.None:
+	        case PowerupControl.PowerupType.None:
 	            GetComponent<Renderer>().material.color = Color.white;
                 break;
-	        case ObstacleControl.PowerupType.Multiball:
+	        case PowerupControl.PowerupType.Multiball:
 	            GetComponent<Renderer>().material.color = Color.magenta;
                 break;
-	        case ObstacleControl.PowerupType.Slower:
+	        case PowerupControl.PowerupType.Slower:
 	            GetComponent<Renderer>().material.color = Color.blue;
                 break;
-	        case ObstacleControl.PowerupType.Faster:
+	        case PowerupControl.PowerupType.Faster:
 	            GetComponent<Renderer>().material.color = Color.red;
                 break;
-	        case ObstacleControl.PowerupType.Shield:
+	        case PowerupControl.PowerupType.Shield:
 	            GetComponent<Renderer>().material.color = Color.green;
                 break;
-	        case ObstacleControl.PowerupType.Pointmania:
+	        case PowerupControl.PowerupType.Pointmania:
 	            GetComponent<Renderer>().material.color = Color.yellow;
                 break;
 	        default:
@@ -105,7 +108,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 				gameObject.transform.Translate(Velocity);
 	            break;
 	        case States.Pause:
-                if (ActivePowerup != ObstacleControl.PowerupType.Shield && Counter > PauseFrames)
+                if (PersonalPowerupType != PowerupControl.PowerupType.Shield && Counter > PauseFrames)
 	            {
 	                Destroy(gameObject);
 	            }
@@ -175,11 +178,11 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 _uiControl.BoostMultiplier();
                 _uiControl.AddScore(SweetReflectPoints);
 
-                if (obs.CurrentPowerupType == ObstacleControl.PowerupType.Faster)
+                if (obs.CurrentPowerupType == PowerupControl.PowerupType.Faster)
                 {
                     HandleBounce(transform.position - obs.transform.position, 2, true);
                 }
-                else if (obs.CurrentPowerupType == ObstacleControl.PowerupType.Slower)
+                else if (obs.CurrentPowerupType == PowerupControl.PowerupType.Slower)
                 {
                     HandleBounce(transform.position - obs.transform.position, 0, true);
                 }
@@ -188,14 +191,14 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                     HandleBounce(transform.position - obs.transform.position, CurrentSpeedClass + 1, false);
                 }
 
-                if (obs.CurrentPowerupType == ObstacleControl.PowerupType.Multiball)
+                if (obs.CurrentPowerupType == PowerupControl.PowerupType.Multiball)
                 {
                     FindObjectOfType<SpawnControl>().SpawnBall();
-                    ActivePowerup = ObstacleControl.PowerupType.None;
+                    PersonalPowerupType = PowerupControl.PowerupType.None;
                 }
                 else
                 {
-                    ActivePowerup = obs.CurrentPowerupType;
+                    _powerupControl.SetAllPowerups(obs.CurrentPowerupType);
                 }
 
                 State = States.Idle;
@@ -213,10 +216,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.Charging:
                 if (State == States.Idle || State == States.Pause)
                 {
-                    if (Counter > PauseFrames && ActivePowerup == ObstacleControl.PowerupType.Shield)
+                    if (Counter > PauseFrames && PersonalPowerupType == PowerupControl.PowerupType.Shield)
                     {
                         HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
-                        ActivePowerup = ObstacleControl.PowerupType.None;
+                        PersonalPowerupType = PowerupControl.PowerupType.None;
                     }
                     else
                     {
@@ -253,10 +256,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.LongCooldown:
                 if (State != States.Bounce)
                 {
-                    if (ActivePowerup == ObstacleControl.PowerupType.Shield)
+                    if (PersonalPowerupType == PowerupControl.PowerupType.Shield)
                     {
                         HandleWallBounce(wall.Normal, CurrentSpeedClass, false);
-                        ActivePowerup = ObstacleControl.PowerupType.None;
+                        PersonalPowerupType = PowerupControl.PowerupType.None;
                     }
                     else
                     {
@@ -306,7 +309,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         var u = (Vector2.Dot(Velocity, normal) / Vector2.Dot(normal, normal)) * normal;
         var w = Velocity - u;
 
-        if (ActivePowerup == ObstacleControl.PowerupType.Faster || ActivePowerup == ObstacleControl.PowerupType.Slower)
+        if (PersonalPowerupType == PowerupControl.PowerupType.Faster || PersonalPowerupType == PowerupControl.PowerupType.Slower)
         {
             if (forceNewSpeed)
             {
@@ -323,4 +326,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
         State = States.Bounce;
     }
+
+	public Vector3 GetPosition(){
+		return gameObject.transform.position;
+	}
 }

@@ -178,6 +178,18 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 11456584, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: SpeedClasses.Array.data[0]
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 11456584, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: SpeedClasses.Array.data[1]
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 11456584, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: SpeedClasses.Array.data[2]
+      value: 300
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
   m_IsPrefabParent: 0
@@ -609,7 +621,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1663741189}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -1000}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -626,6 +638,7 @@ GameObject:
   - 114: {fileID: 1735723897}
   - 212: {fileID: 1735723899}
   - 114: {fileID: 1735723900}
+  - 114: {fileID: 1735723901}
   m_Layer: 0
   m_Name: MainController
   m_TagString: Untagged
@@ -703,6 +716,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetFrameRate: 60
   Scene: TestBed
+--- !u!114 &1735723901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1735723896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff76002313bbb0646a3c965124a6c212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LastPowerup: 0
+  PowerupCounter: 0
+  Durations:
+  - PowerupType: 0
+    BounceNumber: 0
+  - PowerupType: 1
+    BounceNumber: 0
+  - PowerupType: 2
+    BounceNumber: 5
+  - PowerupType: 3
+    BounceNumber: 5
+  - PowerupType: 4
+    BounceNumber: 5
+  - PowerupType: 5
+    BounceNumber: 5
 --- !u!1 &1950143653
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,7 +919,7 @@ Transform:
   m_GameObject: {fileID: 2121298924}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
-  m_LocalScale: {x: 0.55, y: 0.55, z: 1}
+  m_LocalScale: {x: 50, y: 50, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 563176620}
