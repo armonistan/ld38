@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 public class SpawnControl : MonoBehaviour
 {
     public int BouncesToSpawn = 5;
+	public int[] PowerupSpawningWeights = new int[Enum.GetValues(typeof(ObstacleControl.PowerupType)).Length];
     public GameObject ObstaclePrefab;
     public GameObject BallPrefab;
 
@@ -34,9 +35,7 @@ public class SpawnControl : MonoBehaviour
     {
         var newObstacle = Instantiate(ObstaclePrefab, GetSpawnPosition(), Quaternion.Euler(0, 0, 0)) as GameObject;
         var obstacleControl = newObstacle.GetComponent<ObstacleControl>();
-        obstacleControl.CurrentPowerupType =
-            (PowerupControl.PowerupType)UnityEngine.Random.Range(0,
-                Enum.GetValues(typeof(PowerupControl.PowerupType)).Length);
+		obstacleControl.CurrentPowerupType = GenerateObstaclePowerupType ();     
 
         _numberOfBouncesSinceLastSpawnCounter -= BouncesToSpawn;
     }
@@ -62,4 +61,29 @@ public class SpawnControl : MonoBehaviour
     {
         _numberOfBouncesSinceLastSpawnCounter++;
     }
+
+	private ObstacleControl.PowerupType GenerateObstaclePowerupType(){
+		int weightRange = 0;
+		int[] powerupSpawnWeightsCalculated = new int[6];
+
+		for(int powerupSpawnWeightsIndex = 0; powerupSpawnWeightsIndex < PowerupSpawningWeights.Length; powerupSpawnWeightsIndex++){
+			int powerupWeight = PowerupSpawningWeights [powerupSpawnWeightsIndex];
+			weightRange += powerupWeight;
+			powerupSpawnWeightsCalculated [powerupSpawnWeightsIndex] = weightRange;
+		}
+
+		int randomNumber = UnityEngine.Random.Range (0, weightRange+1);//+1 because range is exclusive
+		Debug.Log(randomNumber);
+		int powerupIndex = 0;
+
+		for(int powerupSpawnWeightsIndex = 0; powerupSpawnWeightsIndex < powerupSpawnWeightsCalculated.Length; powerupSpawnWeightsIndex++){
+			if (randomNumber <= powerupSpawnWeightsCalculated[powerupSpawnWeightsIndex]) {
+				powerupIndex = powerupSpawnWeightsIndex;
+				break;
+			}
+		}
+
+
+		return (ObstacleControl.PowerupType)powerupIndex;
+	}
 }

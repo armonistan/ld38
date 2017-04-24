@@ -41,6 +41,11 @@ namespace Assets.Scripts
 
         public void Update()
         {
+            if (Time.timeScale == GameControl.Paused)
+            {
+                return;
+            }
+
             var currentSprite = Sprites.First(sprites => sprites.PowerupType == CurrentPowerupType);
 
             switch (State)
