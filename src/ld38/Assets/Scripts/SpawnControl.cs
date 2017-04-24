@@ -24,6 +24,11 @@ public class SpawnControl : MonoBehaviour
         _powerupControl = FindObjectOfType<PowerupControl>();
     }
 
+    public void Restart()
+    {
+        _numberOfBouncesSinceLastSpawnCounter = 0;
+    }
+
     // Update is called once per frame
     void Update()
     {

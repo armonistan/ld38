@@ -11,6 +11,7 @@ public class UICounterControl : StatefulMonoBehavior<UICounterControl.States> {
     public int FullFrames = 30;
 
     private SpawnControl _spawnControl;
+    private PowerupControl _powerupControl;
 
     public enum States
     {
@@ -24,6 +25,7 @@ public class UICounterControl : StatefulMonoBehavior<UICounterControl.States> {
 	void Start () {
         State = States.Empty;
         _spawnControl = FindObjectOfType<SpawnControl> ();
+	    _powerupControl = FindObjectOfType<PowerupControl>();
 	}
 	
 	// Update is called once per frame
@@ -32,26 +34,20 @@ public class UICounterControl : StatefulMonoBehavior<UICounterControl.States> {
         {
             case States.Empty:
             case States.Filling:
-                int illuminatedBubbles = _spawnControl.GetBouncesSinceLastSpawn();
-
-                for (int i = 0; i < counterBubbles.Length; i++)
+                if (_powerupControl.ActivePowerup != PowerupControl.PowerupType.None)
                 {
-                    Image imageComponent = counterBubbles[i].GetComponent<Image>();
-                    Color c = imageComponent.color;
-                    if (i < illuminatedBubbles)
-                    {
-                        c.a = 1f;
-                        imageComponent.color = c;
-                    }
-                    else
-                    {
-                        c.a = .5f;
-                        imageComponent.color = c;
-                    }
+                    State = States.Emptying;
                 }
-                if (illuminatedBubbles == counterBubbles.Length)
+                else
                 {
-                    State = States.Full;
+                    int illuminatedBubbles = _spawnControl.GetBouncesSinceLastSpawn();
+
+                    ColorBubbles(illuminatedBubbles, Color.white);
+
+                    if (illuminatedBubbles == counterBubbles.Length)
+                    {
+                        State = States.Full;
+                    }
                 }
                 break;
             case States.Full:
@@ -65,9 +61,37 @@ public class UICounterControl : StatefulMonoBehavior<UICounterControl.States> {
                 }
                 break;
             case States.Emptying:
+                int powerupBubbles = _powerupControl.PowerupCounter;
+
+                ColorBubbles(powerupBubbles, _powerupControl.ActivePowerupColor);
+
+                if (powerupBubbles == 0)
+                {
+                    State = States.Empty;
+                }
                 break;
             default:
                 break;
         }
 	}
+
+    private void ColorBubbles(int illuminatedBubbles, Color baseColor)
+    {
+        for (int i = 0; i < counterBubbles.Length; i++)
+        {
+            Image imageComponent = counterBubbles[i].GetComponent<Image>();
+            Color c = baseColor;
+
+            if (i < illuminatedBubbles)
+            {
+                c.a = 1f;
+                imageComponent.color = c;
+            }
+            else
+            {
+                c.a = .5f;
+                imageComponent.color = c;
+            }
+        }
+    }
 }
