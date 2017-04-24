@@ -89,6 +89,8 @@ public class GameControl : StatefulMonoBehavior<GameControl.States>
     {
         FindObjectOfType<UiControl>().Restart();
         FindObjectOfType<SpawnControl>().Restart();
+        FindObjectOfType<StoryControl>().Restart();
+        FindObjectOfType<StoryControl>().tellStory = true;
         Instantiate(BallPrefab, Vector2.zero, Quaternion.Euler(0, 0, 0));
     }
 
@@ -105,6 +107,8 @@ public class GameControl : StatefulMonoBehavior<GameControl.States>
         {
             Destroy(obstacle.gameObject);
         }
+
+        FindObjectOfType<StoryControl>().tellStory = false;
 
         var pointManias = FindObjectsOfType<PointManiaControl>();
         foreach (var pointMania in pointManias)
