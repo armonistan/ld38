@@ -50,7 +50,7 @@ public class StoryControl : Assets.Scripts.StatefulMonoBehavior<StoryControl.Sta
         while (n > 1)
         {
             n--;
-            int k = (int)(Random.Range(0, n));
+            int k = (int)(Random.Range(1, n + 1));
             string value = _storyText[k];
             _storyText[k] = _storyText[n];
             _storyText[n] = value;
