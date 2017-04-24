@@ -79,21 +79,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DegAngle: 0
+  BallSteeringMagnitude: 1.5
+  LeftBallSteering: 97
+  RightBallSteering: 100
   Speed: 4
+  StrongReflectBonus: 1
+  BaseSpeedClass: 1
   SpeedClasses:
   - 100
   - 200
   - 400
-  CurrentSpeedClass: 1
-  BallSteeringMagnitude: 1.5
   PauseFrames: 5
+  PersonalPowerupType: 0
+  BounceBonus: 0
   ReflectPoints: 100
   SweetReflectPoints: 300
   ObstaclePoints: 200
   DestroyObstaclePoints: 400
-  ActivePowerup: 0
-  LeftBallSteering: 97
-  RightBallSteering: 100
 --- !u!212 &21217510
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -996,7 +996,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LastPowerup: 0
   PowerupCounter: 0
-  Durations: []
+  Durations:
+  - PowerupType: 0
+    BounceNumber: 0
+  - PowerupType: 1
+    BounceNumber: 0
+  - PowerupType: 2
+    BounceNumber: 5
+  - PowerupType: 3
+    BounceNumber: 5
+  - PowerupType: 4
+    BounceNumber: 0
+  - PowerupType: 5
+    BounceNumber: 5
 --- !u!4 &1218216016
 Transform:
   m_ObjectHideFlags: 0
