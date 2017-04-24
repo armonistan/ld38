@@ -63,7 +63,7 @@ public class UICounterControl : StatefulMonoBehavior<UICounterControl.States> {
             case States.Emptying:
                 int powerupBubbles = _powerupControl.PowerupCounter;
 
-                ColorBubbles(powerupBubbles, _powerupControl.ActivePowerupColor);
+                ColorBubbles(powerupBubbles, _powerupControl.GetPowerupColor(_powerupControl.ActivePowerup));
 
                 if (powerupBubbles == 0)
                 {

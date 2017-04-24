@@ -98,48 +98,26 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 	        return;
 	    }
 
-        if (_contrail)
-        {
-            float angle = Mathf.Atan2(-Velocity.y, -Velocity.x) * Mathf.Rad2Deg;
-            _contrail.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        }
+	    if (_contrail)
+	    {
+	        _contrail.transform.rotation = Quaternion.AngleAxis(DegAngle + 180, Vector3.forward);
 
-	    if (Input.GetKey(LeftBallSteering))
-	    {
-	        RadAngle += (BallSteeringMagnitude * Time.deltaTime);
-            _contrail.GetComponent<SpriteRenderer>().sprite = leftSteeringContrail;
-	    }
-	    else if (Input.GetKey(RightBallSteering))
-	    {
-	        RadAngle -= (BallSteeringMagnitude * Time.deltaTime);
-            _contrail.GetComponent<SpriteRenderer>().sprite = rightSteeringContrail;
-        } else
-        {
-            _contrail.GetComponent<SpriteRenderer>().sprite = baseContrail;
-        }
+	        if (Input.GetKey(LeftBallSteering))
+	        {
+	            RadAngle += (BallSteeringMagnitude * Time.deltaTime);
+	            _contrail.GetComponent<SpriteRenderer>().sprite = leftSteeringContrail;
+	        }
+	        else if (Input.GetKey(RightBallSteering))
+	        {
+	            RadAngle -= (BallSteeringMagnitude * Time.deltaTime);
+	            _contrail.GetComponent<SpriteRenderer>().sprite = rightSteeringContrail;
+	        }
+	        else
+	        {
+	            _contrail.GetComponent<SpriteRenderer>().sprite = baseContrail;
+	        }
 
-        switch (PersonalPowerupType)
-	    {
-	        case PowerupControl.PowerupType.None:
-	            GetComponent<Renderer>().material.color = Color.white;
-                break;
-	        case PowerupControl.PowerupType.Multiball:
-	            GetComponent<Renderer>().material.color = Color.magenta;
-                break;
-	        case PowerupControl.PowerupType.Slower:
-	            GetComponent<Renderer>().material.color = Color.blue;
-                break;
-	        case PowerupControl.PowerupType.Faster:
-	            GetComponent<Renderer>().material.color = Color.red;
-                break;
-	        case PowerupControl.PowerupType.Shield:
-	            GetComponent<Renderer>().material.color = Color.green;
-                break;
-	        case PowerupControl.PowerupType.Pointmania:
-	            GetComponent<Renderer>().material.color = Color.yellow;
-                break;
-	        default:
-	            throw new ArgumentOutOfRangeException();
+            _contrail.GetComponent<SpriteRenderer>().color = _powerupControl.GetPowerupColor(PersonalPowerupType);
 	    }
 
         switch (State)

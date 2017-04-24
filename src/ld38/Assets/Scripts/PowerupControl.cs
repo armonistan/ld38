@@ -32,11 +32,6 @@ public class PowerupControl : MonoBehaviour
         get { return PowerupCounter > 0 ? LastPowerup : PowerupType.None; }
     }
 
-    public Color ActivePowerupColor
-    {
-        get { return Data.First(data => data.PowerupType == ActivePowerup).PowerupColor; }
-    }
-
     // Use this for initialization
     void Start () {
 	
@@ -69,5 +64,10 @@ public class PowerupControl : MonoBehaviour
         LastPowerup = power;
 
         PowerupCounter = Data.First(duration => duration.PowerupType == power).BounceNumber;
+    }
+
+    public Color GetPowerupColor(PowerupType powerup)
+    {
+        return Data.First(data => data.PowerupType == powerup).PowerupColor;
     }
 }
