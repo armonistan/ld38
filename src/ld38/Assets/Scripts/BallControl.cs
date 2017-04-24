@@ -15,8 +15,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
 	public float DegAngle;
 	public float BallSteeringMagnitude = 1;
-	public KeyCode LeftBallSteering = KeyCode.LeftArrow;
-	public KeyCode RightBallSteering = KeyCode.RightArrow;
+	public KeyCode LeftBallSteering = KeyCode.A;
+	public KeyCode RightBallSteering = KeyCode.D;
 
     public float Speed = 4;
     public int StrongReflectBonus = 1;
