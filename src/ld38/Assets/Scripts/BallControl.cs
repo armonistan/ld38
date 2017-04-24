@@ -54,7 +54,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 	
 	// Update is called once per frame
 	void Update () {
-	    if (Time.timeScale == GameControl.Paused)
+		if (Time.timeScale == GameControl.Paused)
 	    {
 	        return;
 	    }
@@ -300,4 +300,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
         State = States.Bounce;
     }
+
+	public Vector3 GetPosition(){
+		return gameObject.transform.position;
+	}
 }
