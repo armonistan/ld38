@@ -33,9 +33,15 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     public int ObstaclePoints = 200;
     public int DestroyObstaclePoints = 400;
 
+    public Sprite baseContrail;
+    public Sprite leftSteeringContrail;
+    public Sprite rightSteeringContrail;
+
 	private SpawnControl _spawnControl;
     private PowerupControl _powerupControl;
     private UiControl _uiControl;
+
+    private Transform _contrail;
 
     public float RadAngle
     {
@@ -81,6 +87,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 		_spawnControl = FindObjectOfType<SpawnControl>();
 	    _powerupControl = FindObjectOfType<PowerupControl>();
         _uiControl = FindObjectOfType<UiControl> ();
+        _contrail = transform.Find("Contrail");
 		DegAngle = UnityEngine.Random.Range (0, 360);
 	}
 	
@@ -91,16 +98,27 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 	        return;
 	    }
 
+        if (_contrail)
+        {
+            float angle = Mathf.Atan2(-Velocity.y, -Velocity.x) * Mathf.Rad2Deg;
+            _contrail.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+
 	    if (Input.GetKey(LeftBallSteering))
 	    {
 	        RadAngle += (BallSteeringMagnitude * Time.deltaTime);
+            _contrail.GetComponent<SpriteRenderer>().sprite = leftSteeringContrail;
 	    }
 	    else if (Input.GetKey(RightBallSteering))
 	    {
 	        RadAngle -= (BallSteeringMagnitude * Time.deltaTime);
-	    }
+            _contrail.GetComponent<SpriteRenderer>().sprite = rightSteeringContrail;
+        } else
+        {
+            _contrail.GetComponent<SpriteRenderer>().sprite = baseContrail;
+        }
 
-	    switch (PersonalPowerupType)
+        switch (PersonalPowerupType)
 	    {
 	        case PowerupControl.PowerupType.None:
 	            GetComponent<Renderer>().material.color = Color.white;
