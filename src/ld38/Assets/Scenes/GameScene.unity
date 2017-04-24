@@ -148,7 +148,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &75313615
 GameObject:
@@ -217,7 +217,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &120583311 stripped
 GameObject:
@@ -284,7 +284,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &531597527
 GameObject:
@@ -331,7 +331,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &531597530
 SpriteRenderer:
@@ -930,7 +930,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 406186, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4891635113518070, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
       propertyPath: m_LocalPosition.x
@@ -1034,22 +1034,22 @@ MonoBehaviour:
   Data:
   - PowerupType: 0
     BounceNumber: 0
-    PowerupColor: {r: 1, g: 1, b: 1, a: 0}
+    PowerupColor: {r: 1, g: 1, b: 1, a: 1}
   - PowerupType: 1
     BounceNumber: 0
-    PowerupColor: {r: 0, g: 0, b: 0, a: 0}
+    PowerupColor: {r: 0.7075207, g: 0.29892948, b: 0.71323526, a: 1}
   - PowerupType: 2
     BounceNumber: 3
-    PowerupColor: {r: 0.17711937, g: 0.49236363, b: 0.9264706, a: 0}
+    PowerupColor: {r: 0.17711937, g: 0.49236363, b: 0.9264706, a: 1}
   - PowerupType: 3
     BounceNumber: 3
-    PowerupColor: {r: 0.8161765, g: 0.28206095, b: 0.28206095, a: 0}
+    PowerupColor: {r: 0.8161765, g: 0.28206095, b: 0.28206095, a: 1}
   - PowerupType: 4
     BounceNumber: 0
-    PowerupColor: {r: 0.3367438, g: 0.7794118, b: 0.32093424, a: 0}
+    PowerupColor: {r: 0.3367438, g: 0.7794118, b: 0.32093424, a: 1}
   - PowerupType: 5
     BounceNumber: 5
-    PowerupColor: {r: 0.7961341, g: 0.8235294, b: 0.32698965, a: 0}
+    PowerupColor: {r: 0.7961341, g: 0.8235294, b: 0.32698965, a: 1}
 --- !u!4 &1218216016
 Transform:
   m_ObjectHideFlags: 0
@@ -1061,8 +1061,54 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1357014035
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 487940, guid: ba7b7f5e9340dfb498455989ae41ce7f, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 62.333042
+      objectReference: {fileID: 0}
+    - target: {fileID: 487940, guid: ba7b7f5e9340dfb498455989ae41ce7f, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 89.11366
+      objectReference: {fileID: 0}
+    - target: {fileID: 487940, guid: ba7b7f5e9340dfb498455989ae41ce7f, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 487940, guid: ba7b7f5e9340dfb498455989ae41ce7f, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 487940, guid: ba7b7f5e9340dfb498455989ae41ce7f, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 487940, guid: ba7b7f5e9340dfb498455989ae41ce7f, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 487940, guid: ba7b7f5e9340dfb498455989ae41ce7f, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 487940, guid: ba7b7f5e9340dfb498455989ae41ce7f, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11481476, guid: ba7b7f5e9340dfb498455989ae41ce7f, type: 2}
+      propertyPath: CurrentPowerupType
+      value: 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ba7b7f5e9340dfb498455989ae41ce7f, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1663741189
 GameObject:
   m_ObjectHideFlags: 0
@@ -1219,7 +1265,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1963755731
 GameObject:
@@ -1371,5 +1417,5 @@ Transform:
   - {fileID: 1193141090}
   - {fileID: 1963755735}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
