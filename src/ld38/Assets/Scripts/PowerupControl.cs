@@ -16,19 +16,25 @@ public class PowerupControl : MonoBehaviour
     }
 
     [Serializable]
-    public class PowerupDurations
+    public class PowerupData
     {
         public PowerupControl.PowerupType PowerupType;
         public int BounceNumber;
+        public Color PowerupColor;
     }
 
     public PowerupType LastPowerup;
     public int PowerupCounter = 0;
-    public PowerupDurations[] Durations;
+    public PowerupData[] Data;
 
     public PowerupType ActivePowerup
     {
         get { return PowerupCounter > 0 ? LastPowerup : PowerupType.None; }
+    }
+
+    public Color ActivePowerupColor
+    {
+        get { return Data.First(data => data.PowerupType == ActivePowerup).PowerupColor; }
     }
 
     // Use this for initialization
@@ -62,6 +68,6 @@ public class PowerupControl : MonoBehaviour
 
         LastPowerup = power;
 
-        PowerupCounter = Durations.First(duration => duration.PowerupType == power).BounceNumber;
+        PowerupCounter = Data.First(duration => duration.PowerupType == power).BounceNumber;
     }
 }
