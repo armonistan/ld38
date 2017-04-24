@@ -202,7 +202,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 _uiControl.BoostMultiplier();
                 _uiControl.AddScore(SweetReflectPoints);
 
-                HandleBounce(obstacleNormal, true);
+                HandleBounce(obstacleNormal, obs.CurrentPowerupType != PowerupControl.PowerupType.Slower);
 
                 if (obs.CurrentPowerupType == PowerupControl.PowerupType.Multiball)
                 {
