@@ -210,7 +210,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                     FindObjectOfType<SpawnControl>().SpawnBall();
                     PersonalPowerupType = PowerupControl.PowerupType.None;
                 }
-                else
+                else if(obs.CurrentPowerupType != PowerupControl.PowerupType.None)
                 {
                     _powerupControl.SetAllPowerups(obs.CurrentPowerupType);
                 }
