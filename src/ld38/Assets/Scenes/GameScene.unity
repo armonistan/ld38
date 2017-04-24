@@ -932,38 +932,73 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 187302, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
-      propertyPath: m_Name
-      value: Ball
+    - target: {fileID: 4891635113518070, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11456584, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
-      propertyPath: LeftBallSteering
-      value: 97
+    - target: {fileID: 4891635113518070, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11456584, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
-      propertyPath: RightBallSteering
-      value: 100
+    - target: {fileID: 4891635113518070, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11456584, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
-      propertyPath: BallSteeringMagnitude
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 11456584, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
-      propertyPath: PauseFrames
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5852310, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
-      propertyPath: m_Radius
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 5051884, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
-      propertyPath: m_CollisionDetection
+    - target: {fileID: 4891635113518070, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5051884, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
-      propertyPath: m_Interpolate
-      value: 1
+    - target: {fileID: 4891635113518070, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4891635113518070, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891635113518070, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891635113518070, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891635113518070, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212030910699451598, guid: d5c867c98a0cbbc4ca88a7ca2df065d3,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 20eeb938e99e3614396712e4a933cf53,
+        type: 3}
+    - target: {fileID: 212030910699451598, guid: d5c867c98a0cbbc4ca88a7ca2df065d3,
+        type: 2}
+      propertyPath: m_Size.x
+      value: 42
+      objectReference: {fileID: 0}
+    - target: {fileID: 212030910699451598, guid: d5c867c98a0cbbc4ca88a7ca2df065d3,
+        type: 2}
+      propertyPath: m_Size.y
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 11456584, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: baseContrail
+      value: 
+      objectReference: {fileID: 21300000, guid: 20eeb938e99e3614396712e4a933cf53,
+        type: 3}
+    - target: {fileID: 11456584, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: leftSteeringContrail
+      value: 
+      objectReference: {fileID: 21300000, guid: e8def5d16bd468148be72ecf9c3462bc,
+        type: 3}
+    - target: {fileID: 11456584, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
+      propertyPath: rightSteeringContrail
+      value: 
+      objectReference: {fileID: 21300000, guid: bfc23cbc1798aad458a58b9c4d86968b,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5c867c98a0cbbc4ca88a7ca2df065d3, type: 2}
   m_IsPrefabParent: 0
