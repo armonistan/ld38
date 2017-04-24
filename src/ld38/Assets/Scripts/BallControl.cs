@@ -152,6 +152,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
         WallControl wall;
         ObstacleControl obs;
+        PointManiaControl point;
 
         if ((wall = other.gameObject.GetComponent<WallControl>()) != null)
         {
@@ -160,6 +161,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         else if ((obs = other.GetComponent<ObstacleControl>()) != null)
         {
             HandleObstacle(obs);
+        }
+        else if ((point = other.GetComponent<PointManiaControl>()) != null)
+        {
+            HandlePointMania(point);
         }
     }
 
@@ -326,7 +331,9 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         State = States.Bounce;
     }
 
-	public Vector3 GetPosition(){
-		return gameObject.transform.position;
-	}
+    private void HandlePointMania(PointManiaControl point)
+    {
+        _uiControl.AddScore(point.PointManiaPoints);
+        Destroy(point.gameObject);
+    }
 }

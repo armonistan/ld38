@@ -14,6 +14,8 @@ public class GameControl : StatefulMonoBehavior<GameControl.States>
     public KeyCode StartEasyMode = KeyCode.Alpha1;
     public KeyCode StartHardMode = KeyCode.Alpha2;
 
+    private PowerupControl _powerupControl;
+
     public enum States
     {
         Menu,
@@ -27,6 +29,8 @@ public class GameControl : StatefulMonoBehavior<GameControl.States>
 	{
 	    QualitySettings.vSyncCount = 0;
 	    Application.targetFrameRate = TargetFrameRate;
+
+	    _powerupControl = FindObjectOfType<PowerupControl>();
 	}
 	
 	// Update is called once per frame
@@ -95,10 +99,19 @@ public class GameControl : StatefulMonoBehavior<GameControl.States>
         {
             Destroy(ball.gameObject);
         }
+
         ObstacleControl[] obstacles = FindObjectsOfType<ObstacleControl>();
         foreach (ObstacleControl obstacle in obstacles)
         {
             Destroy(obstacle.gameObject);
         }
+
+        var pointManias = FindObjectsOfType<PointManiaControl>();
+        foreach (var pointMania in pointManias)
+        {
+            Destroy(pointMania.gameObject);
+        }
+
+        _powerupControl.Reset();
     }
 }

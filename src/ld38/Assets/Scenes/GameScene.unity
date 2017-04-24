@@ -869,6 +869,9 @@ MonoBehaviour:
   - PowerupType: 5
     BounceNumber: 5
     PowerupColor: {r: 0.7961341, g: 0.8235294, b: 0.32698965, a: 1}
+  PointmaniaCount: 10
+  PointManiaPrefab: {fileID: 114353848969284328, guid: e0f3022cd1885cc498844c6263d85a22,
+    type: 2}
 --- !u!4 &1218216016
 Transform:
   m_ObjectHideFlags: 0
