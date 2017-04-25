@@ -49,6 +49,8 @@ public class StoryControl : Assets.Scripts.StatefulMonoBehavior<StoryControl.Sta
         _storyText.Add("Everyone shares the best version of themselves, but that's such a small slice of an already small existence.");
         _storyText.Add("Isn't it weird how the mind's eye can only focus on one thing at a time? There's been a lot going on around you, you know.");
         _storyText.Add("I hope you're enjoying the game. Your time is precious, and I'm glad you're spending it here. Maybe our worlds are getting a little bigger as we speak.");
+		_storyText.Add("These little moments we share together. So small. So fleeting. And yet, being temporary doesn't take away from it at all.");
+		_storyText.Add("I wonder... is this the first time we've met? And perhaps more importantly, is it the last?");
         _storyCursor = 0;
 
         int n = _storyText.Count;
