@@ -90,6 +90,11 @@ public class GameControl : StatefulMonoBehavior<GameControl.States>
         FindObjectOfType<UiControl>().Restart();
         FindObjectOfType<SpawnControl>().Restart();
         FindObjectOfType<StoryControl>().Restart();
+        WallControl[] walls = FindObjectsOfType<WallControl>();
+        foreach (WallControl wall in walls)
+        {
+            wall.Restart();
+        }
         FindObjectOfType<StoryControl>().tellStory = true;
         Instantiate(BallPrefab, Vector2.zero, Quaternion.Euler(0, 0, 0));
     }

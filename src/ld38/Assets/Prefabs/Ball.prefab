@@ -87,10 +87,10 @@ MonoBehaviour:
   StrongReflectBonus: 1
   BaseSpeedClass: 1
   SpeedClasses:
-  - 100
+  - 150
   - 200
-  - 400
-  PauseFrames: 5
+  - 300
+  PauseFrames: 6
   PersonalPowerupType: 0
   BounceBonus: 0
   ReflectPoints: 100

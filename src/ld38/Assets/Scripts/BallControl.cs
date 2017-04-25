@@ -89,6 +89,15 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
         _uiControl = FindObjectOfType<UiControl> ();
         _contrail = transform.Find("Contrail");
 		DegAngle = UnityEngine.Random.Range (0, 360);
+
+        if (FindObjectOfType<GameControl>().GetGameState() == GameControl.States.EasyMode)
+        {
+            PauseFrames = 6;
+        }
+        else if (FindObjectOfType<GameControl>().GetGameState() == GameControl.States.HardMode)
+        {
+            PauseFrames = 3;
+        }
 	}
 	
 	// Update is called once per frame
@@ -207,10 +216,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
                 if (obs.CurrentPowerupType == PowerupControl.PowerupType.Multiball)
                 {
-                    FindObjectOfType<SpawnControl>().SpawnBall();
+                    FindObjectOfType<SpawnControl>().SpawnBalls();
                     PersonalPowerupType = PowerupControl.PowerupType.None;
                 }
-                else
+                else if(obs.CurrentPowerupType != PowerupControl.PowerupType.None)
                 {
                     _powerupControl.SetAllPowerups(obs.CurrentPowerupType);
                 }
