@@ -92,7 +92,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
         if (FindObjectOfType<GameControl>().GetGameState() == GameControl.States.EasyMode)
         {
-            PauseFrames = 6;
+            PauseFrames = 7;
         }
         else if (FindObjectOfType<GameControl>().GetGameState() == GameControl.States.HardMode)
         {
