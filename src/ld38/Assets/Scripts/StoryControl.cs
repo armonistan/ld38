@@ -35,14 +35,14 @@ public class StoryControl : Assets.Scripts.StatefulMonoBehavior<StoryControl.Sta
     public void Restart()
     {
         _storyText = new List<string>();
-        _storyText.Add("story element 1");
-        _storyText.Add("story element 2");
-        _storyText.Add("story element 3");
-        _storyText.Add("story element 4");
-        _storyText.Add("story element 5");
-        _storyText.Add("story element 6");
-        _storyText.Add("story element 7");
-        _storyText.Add("story element 8");
+        _storyText.Add("This is a really long story element how does it look after the wrap is applied to the text?");
+		_storyText.Add("This is a really long story element how does it look after the wrap is applied to the text?");
+		_storyText.Add("This is a really long story element how does it look after the wrap is applied to the text?");
+		_storyText.Add("This is a really long story element how does it look after the wrap is applied to the text?");
+		_storyText.Add("This is a really long story element how does it look after the wrap is applied to the text?");
+		_storyText.Add("This is a really long story element how does it look after the wrap is applied to the text?");
+		_storyText.Add("This is a really long story element how does it look after the wrap is applied to the text?");
+		_storyText.Add("This is a really long story element how does it look after the wrap is applied to the text?");
         _storyCursor = 0;
 
         int n = _storyText.Count;
