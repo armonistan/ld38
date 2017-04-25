@@ -33,6 +33,12 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     public int ObstaclePoints = 200;
     public int DestroyObstaclePoints = 400;
 
+    public AudioSource sweetBounce;
+    public AudioSource staleBounce;
+    public AudioSource strongBounce;
+    public AudioSource obstacleBounce;
+    public AudioSource powerupBounce;
+
     public Sprite baseContrail;
     public Sprite leftSteeringContrail;
     public Sprite rightSteeringContrail;
@@ -92,7 +98,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
         if (FindObjectOfType<GameControl>().GetGameState() == GameControl.States.EasyMode)
         {
-            PauseFrames = 6;
+            PauseFrames = 7;
         }
         else if (FindObjectOfType<GameControl>().GetGameState() == GameControl.States.HardMode)
         {
@@ -203,6 +209,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 //add score for hitting obstacle
                 _uiControl.AddScore(ObstaclePoints);
                 obs.State = obs.State + 1;
+				if (obstacleBounce.clip != null) 
+				{
+					obstacleBounce.Play();
+		    	}
 
                 HandleBounce(obstacleNormal, false);
             }
@@ -221,7 +231,18 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 else if(obs.CurrentPowerupType != PowerupControl.PowerupType.None)
                 {
+					if (powerupBounce.clip != null) 
+					{
+						powerupBounce.Play();
+			    	}
                     _powerupControl.SetAllPowerups(obs.CurrentPowerupType);
+                }
+                else
+                {
+					if (strongBounce.clip != null) 
+					{
+						strongBounce.Play();
+			    	}
                 }
 
                 State = States.Idle;
@@ -255,6 +276,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 _uiControl.ResetMultipler();
                 if (State == States.Pause)
                 {
+					if (sweetBounce.clip != null) 
+					{
+						sweetBounce.Play();
+			    	}
                     //sweet spot scoring
                     _uiControl.AddScore(SweetReflectPoints);
                     HandleWallBounce(wall.Normal, false);
@@ -269,6 +294,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 else if (State == States.Idle)
                 {
+					if (staleBounce.clip != null) 
+					{
+						staleBounce.Play();
+			    	}
                     //normal scoring
                     _uiControl.AddScore(ReflectPoints);
                     HandleWallBounce(wall.Normal, false);
@@ -292,6 +321,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 break;
             case WallControl.States.StrongReflect:
                 //add one to the current multiplier
+				if (strongBounce.clip != null) 
+				{
+					strongBounce.Play();
+		    	}
                 _uiControl.BoostMultiplier();
                 if (State == States.Pause)
                 {
