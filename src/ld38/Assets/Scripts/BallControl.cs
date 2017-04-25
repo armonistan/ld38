@@ -216,7 +216,7 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
 
                 if (obs.CurrentPowerupType == PowerupControl.PowerupType.Multiball)
                 {
-                    FindObjectOfType<SpawnControl>().SpawnBall();
+                    FindObjectOfType<SpawnControl>().SpawnBalls();
                     PersonalPowerupType = PowerupControl.PowerupType.None;
                 }
                 else if(obs.CurrentPowerupType != PowerupControl.PowerupType.None)
