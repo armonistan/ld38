@@ -23,16 +23,19 @@ public class SpawnControl : MonoBehaviour
         get { return GetComponent<SpriteRenderer>().bounds; }
     }
 
+    public PowerupControl.PowerupType NextPowerup { get; private set; }
+
     // Use this for initialization
     void Start()
     {
-        _numberOfBouncesSinceLastSpawnCounter = 0;
+        Restart();
         _powerupControl = FindObjectOfType<PowerupControl>();
     }
 
     public void Restart()
     {
         _numberOfBouncesSinceLastSpawnCounter = 0;
+        NextPowerup = GenerateObstaclePowerupType();
     }
 
     // Update is called once per frame
@@ -48,46 +51,45 @@ public class SpawnControl : MonoBehaviour
     {
         var newObstacle = Instantiate(ObstaclePrefab, GetRandomSpawnPoint(SpawnBounds), Quaternion.Euler(0, 0, 0)) as GameObject;
         var obstacleControl = newObstacle.GetComponent<ObstacleControl>();
-        obstacleControl.CurrentPowerupType = GenerateObstaclePowerupType();
+        obstacleControl.CurrentPowerupType = NextPowerup;
 
-        _numberOfBouncesSinceLastSpawnCounter = 0;
+        Restart();
     }
 
-    private Vector2 GetSpawnPosition()
+    private Vector2 GetObstacleSpawnPoint(BallControl ball)
     {
         //TODO: Make this work
-        //BallControl ball = FindObjectOfType<BallControl>();
-        //float ballSlope = 0;
-        //float lineConstant = 0;
-        //float ballMinBoundX = ball.GetPosition().x;
-        //float ballMaxBoundX = ball.GetPosition().x;
-        //float ballMinBoundY = ball.GetPosition().y;
-        //float ballMaxBoundY = ball.GetPosition().y;
-        //float xPositionVariance = (Random.Range(-1 * xVariance, xVariance));
-        //float yPositionVariance = (Random.Range(-1 * yVariance, yVariance));
-        //bool infiniteBallSlope = ball.Velocity.x != 0;
+        float ballSlope = 0;
+        float lineConstant = 0;
+        float ballMinBoundX = ball.transform.position.x;
+        float ballMaxBoundX = ball.transform.position.x;
+        float ballMinBoundY = ball.transform.position.y;
+        float ballMaxBoundY = ball.transform.position.y;
+        float xPositionVariance = (Random.Range(-1 * xVariance, xVariance));
+        float yPositionVariance = (Random.Range(-1 * yVariance, yVariance));
+        bool infiniteBallSlope = ball.Velocity.x != 0;
 
-        //if (!infiniteBallSlope)
-        //{
-        //    ballSlope = ball.Velocity.y / ball.Velocity.x;
-        //    lineConstant = ball.GetPosition().y - (ballSlope * ball.GetPosition().x);
+        if (!infiniteBallSlope)
+        {
+            ballSlope = ball.Velocity.y / ball.Velocity.x;
+            lineConstant = ball.transform.position.y - (ballSlope * ball.transform.position.x);
 
-        //    if (ballSlope != 0)
-        //    {
-        //        ballMinBoundX = (spriteRenderer.bounds.min.y - lineConstant) / ballSlope;
-        //        ballMaxBoundX = (spriteRenderer.bounds.max.y - lineConstant) / ballSlope;
-        //    }
-        //    else
-        //    {
-        //        ballMinBoundX = spriteRenderer.bounds.min.x;
-        //        ballMaxBoundX = spriteRenderer.bounds.max.x;
-        //    }
-        //}
+            if (ballSlope != 0)
+            {
+                ballMinBoundX = (SpawnBounds.min.y - lineConstant) / ballSlope;
+                ballMaxBoundX = (SpawnBounds.max.y - lineConstant) / ballSlope;
+            }
+            else
+            {
+                ballMinBoundX = SpawnBounds.min.x;
+                ballMaxBoundX = SpawnBounds.max.x;
+            }
+        }
 
-        //float spawnPositionX = Random.Range(ballMinBoundX, ballMaxBoundX);
-        //float spawnPositionY = Random.Range(1, 1);
+        float spawnPositionX = Random.Range(ballMinBoundX, ballMaxBoundX);
+        float spawnPositionY = Random.Range(1, 1);
 
-        return GetRandomSpawnPoint(SpawnBounds);
+        return new Vector2(spawnPositionX, spawnPositionY);
     }
 
     public Vector2 GetRandomSpawnPoint(Bounds bounds)
@@ -96,15 +98,21 @@ public class SpawnControl : MonoBehaviour
             Random.Range(bounds.min.y, bounds.max.y));
     }
 
-    public void SpawnBall()
+    public void SpawnBalls()
     {
-        var ball = Instantiate(BallPrefab, GetSpawnPosition(), Quaternion.Euler(0, 0, 0)) as GameObject;
+        var existingBalls = FindObjectsOfType<BallControl>();
 
-        if (ball != null && _powerupControl.LastPowerup != PowerupControl.PowerupType.Multiball &&
-            _powerupControl.LastPowerup != PowerupControl.PowerupType.None)
+        foreach (var ball in existingBalls)
         {
-            ball.GetComponent<BallControl>().PersonalPowerupType = _powerupControl.LastPowerup;
+            var newBall = Instantiate(BallPrefab, ball.transform.position, Quaternion.Euler(0, 0, 0));
+
+            if (newBall != null && _powerupControl.LastPowerup != PowerupControl.PowerupType.Multiball &&
+                _powerupControl.LastPowerup != PowerupControl.PowerupType.None)
+            {
+                newBall.GetComponent<BallControl>().PersonalPowerupType = _powerupControl.LastPowerup;
+            }
         }
+        
     }
 
     public void RegisterBounce()
@@ -112,7 +120,7 @@ public class SpawnControl : MonoBehaviour
         if (_powerupControl.ActivePowerup != PowerupControl.PowerupType.None)
         {
             _powerupControl.PowerupCounter--;
-            _numberOfBouncesSinceLastSpawnCounter = 0;
+            Restart();
         }
         else
         {
