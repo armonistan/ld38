@@ -33,7 +33,8 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     public int ObstaclePoints = 200;
     public int DestroyObstaclePoints = 400;
 
-    public AudioSource bounce;
+    public AudioSource sweetBounce;
+    public AudioSource staleBounce;
     public AudioSource strongBounce;
     public AudioSource obstacleBounce;
     public AudioSource powerupBounce;
@@ -273,12 +274,12 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.Reflect:
                 // set multiplier back to 1, broke a chain of strong hits
                 _uiControl.ResetMultipler();
-				if (bounce.clip != null) 
-				{
-					bounce.Play();
-		    	}
                 if (State == States.Pause)
                 {
+					if (sweetBounce.clip != null) 
+					{
+						sweetBounce.Play();
+			    	}
                     //sweet spot scoring
                     _uiControl.AddScore(SweetReflectPoints);
                     HandleWallBounce(wall.Normal, false);
@@ -293,6 +294,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 else if (State == States.Idle)
                 {
+					if (staleBounce.clip != null) 
+					{
+						staleBounce.Play();
+			    	}
                     //normal scoring
                     _uiControl.AddScore(ReflectPoints);
                     HandleWallBounce(wall.Normal, false);
