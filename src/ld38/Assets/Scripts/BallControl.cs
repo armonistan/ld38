@@ -33,6 +33,11 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
     public int ObstaclePoints = 200;
     public int DestroyObstaclePoints = 400;
 
+    public AudioSource bounce;
+    public AudioSource strongBounce;
+    public AudioSource obstacleBounce;
+    public AudioSource powerupBounce;
+
     public Sprite baseContrail;
     public Sprite leftSteeringContrail;
     public Sprite rightSteeringContrail;
@@ -203,6 +208,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 //add score for hitting obstacle
                 _uiControl.AddScore(ObstaclePoints);
                 obs.State = obs.State + 1;
+				if (obstacleBounce.clip != null) 
+				{
+					obstacleBounce.Play();
+		    	}
 
                 HandleBounce(obstacleNormal, false);
             }
@@ -221,7 +230,18 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 }
                 else if(obs.CurrentPowerupType != PowerupControl.PowerupType.None)
                 {
+					if (powerupBounce.clip != null) 
+					{
+						powerupBounce.Play();
+			    	}
                     _powerupControl.SetAllPowerups(obs.CurrentPowerupType);
+                }
+                else
+                {
+					if (strongBounce.clip != null) 
+					{
+						strongBounce.Play();
+			    	}
                 }
 
                 State = States.Idle;
@@ -253,6 +273,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
             case WallControl.States.Reflect:
                 // set multiplier back to 1, broke a chain of strong hits
                 _uiControl.ResetMultipler();
+				if (bounce.clip != null) 
+				{
+					bounce.Play();
+		    	}
                 if (State == States.Pause)
                 {
                     //sweet spot scoring
@@ -292,6 +316,10 @@ public class BallControl : StatefulMonoBehavior<BallControl.States>
                 break;
             case WallControl.States.StrongReflect:
                 //add one to the current multiplier
+				if (strongBounce.clip != null) 
+				{
+					strongBounce.Play();
+		    	}
                 _uiControl.BoostMultiplier();
                 if (State == States.Pause)
                 {
