@@ -105,7 +105,7 @@ public class WallControl : StatefulMonoBehavior<WallControl.States>
 	            {
 	                State = States.Charging;
 	            } 
-	            else if (Input.GetKey(EnableKey) && !NeedsEnabled)
+	            else if (Input.GetKey(EnableKey) && !NeedsEnabled && !FindObjectsOfType<WallControl>().Any(wall => wall.EnableKey != EnableKey && wall.State == States.Charging))
 	            {
 	            	State = States.Charging;
 	            }
